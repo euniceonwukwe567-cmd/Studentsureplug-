@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studentsureplug</title>
+<link rel="icon" href="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#060f1c;color:#fff}
+header{background:#0d1d30;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #22364f;position:sticky;top:0;z-index:10}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-img{height:48px;width:auto;max-width:150px;border-radius:10px;object-fit:contain;background:transparent;display:block}
+.logo-text{line-height:1.2}
+.logo-text b{font-size:17px;letter-spacing:.5px}
+.logo-text b span{color:#00e6a0}
+.logo-text small{font-size:11px;color:#8aa0b8;letter-spacing:2px}
+.header-right{display:flex;gap:8px;align-items:center}
+.btn{border:none;cursor:pointer;font-weight:700;border-radius:10px;padding:11px 16px;font-size:14px}
+.btn-green{background:#00e6a0;color:#04120c}
+.btn-outline{background:transparent;color:#fff;border:1px solid #3a5575}
+.btn-small{padding:8px 12px;font-size:13px}
+.btn-withdraw{background:#ffb938;color:#251800}
+.container{max-width:620px;margin:auto;padding:14px}
+.top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.stat{background:#0d1d30;border:1px solid #22364f;border-radius:12px;padding:12px;text-align:center}
+.stat small{color:#8aa0b8;font-size:11px;display:block}
+.stat b{font-size:16px}
+.live-dot{width:8px;height:8px;background:#00e6a0;border-radius:50%;display:inline-block;animation:pulse 1s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+.game-box{background:#0d1d30;border:1px solid #22364f;border-radius:18px;padding:16px}
+.sound-row{display:flex;justify-content:space-between;align-items:center;background:#081522;border:1px solid #22364f;border-radius:10px;padding:9px 12px;margin-bottom:10px}
+.sound-row span{font-size:13px;font-weight:700}
+.sound-btn{border:none;cursor:pointer;padding:7px 14px;border-radius:20px;font-weight:800;font-size:11px}
+.sound-btn.on{background:#00e6a0;color:#04120c}
+.sound-btn.off{background:#2a3545;color:#8aa0b8}
+.status{text-align:center;color:#00e6a0;font-size:12px;letter-spacing:1px;font-weight:800}
+.multiplier{font-size:54px;font-weight:900;text-align:center;margin:8px 0;color:#00e6a0}
+.multiplier.crashed{color:#ff5d70}
+.multiplier.waiting{color:#ffb938}
+canvas{display:block;width:100%;height:220px;background:#071522;border-radius:12px}
+.controls{margin-top:16px}
+label{font-size:13px;color:#cbd5e1;display:block;margin-bottom:6px}
+input,select{width:100%;padding:14px;border:1px solid #33485e;background:#081522;color:#fff;border-radius:10px;outline:none;font-size:15px}
+.quick{display:flex;gap:8px;margin-top:10px}
+.quick button{flex:1;background:#1e354d;color:#fff;border:none;padding:11px 4px;border-radius:8px;cursor:pointer;font-weight:700}
+.quick button.active{background:#00e6a0;color:#04120c}
+.actions{display:flex;gap:10px;margin-top:14px}
+.actions button{flex:1;padding:15px 5px;border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer}
+.start{background:#00e6a0;color:#04120c}
+.cash{background:#ffb938;color:#251800}
+button:disabled{opacity:.4;cursor:not-allowed}
+.message{text-align:center;margin-top:12px;font-size:13px;min-height:20px;color:#a8b8cc}
+.history{margin-top:16px;background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:15px}
+.history h3{font-size:15px;margin-bottom:12px}
+.history-list{display:flex;flex-wrap:wrap;gap:8px}
+.history-item{background:#1e354d;padding:8px 12px;border-radius:20px;font-size:13px;font-weight:700}
+.green{color:#00e6a0}.red{color:#ff5d70}.blue{color:#4da6ff}
+.leader{background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:15px;margin-top:16px}
+.leader-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1a2c42;font-size:13px}
+footer{text-align:center;padding:22px;color:#6b7f96;font-size:12px;line-height:1.6}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;justify-content:center;align-items:center;padding:16px}
+.modal-content{background:#0d1d30;border:1px solid #2a415c;width:100%;max-width:400px;padding:24px;border-radius:18px}
+.modal-content h2{margin-bottom:6px;text-align:center}.modal-content p{color:#8aa0b8;font-size:13px;margin-bottom:14px;text-align:center}
+.tabs{display:flex;background:#071522;border-radius:10px;padding:4px;margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:transparent;color:#8aa0b8;cursor:pointer;font-weight:700}
+.tabs button.active{background:#00e6a0;color:#04120c}
+.link{color:#00e6a0;cursor:pointer;font-size:13px;text-align:center;display:block;margin-top:12px}
+.user-chip{display:flex;align-items:center;gap:8px;background:#162c44;padding:6px 10px;border-radius:20px;font-size:13px}
+.avatar{width:28px;height:28px;background:#00e6a0;color:#04120c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
+.modal-logo{width:100%;max-width:220px;height:auto;border-radius:12px;object-fit:contain;margin:0 auto 10px;display:block;background:transparent}
+.footer-logo{width:110px;height:auto;border-radius:12px;object-fit:contain;margin-bottom:8px;background:transparent}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;background:#081522;border:1px solid #33485e;border-radius:10px;padding:12px;margin-top:12px;font-size:13px}
+.toggle-row input{width:auto;accent-color:#00e6a0}
+.round-info{text-align:center;font-size:12px;color:#8aa0b8;margin-top:8px}
+.auto-box{background:#081522;border:1px solid #33485e;border-radius:12px;padding:12px;margin-top:14px}
+.auto-header{display:flex;justify-content:space-between;align-items:center}
+.auto-header span{font-size:13px;font-weight:700}
+.auto-toggle{border:none;cursor:pointer;padding:8px 16px;border-radius:20px;font-weight:800;font-size:12px}
+.auto-toggle.off{background:#2a3545;color:#8aa0b8}
+.auto-toggle.on{background:#00e6a0;color:#04120c}
+.auto-input-wrap{margin-top:10px}
+.auto-input-wrap.hide{display:none}
+.auto-input{width:100%;padding:12px;border:1px solid #00e6a0;background:#071522;color:#fff;border-radius:8px;outline:none;font-size:18px;text-align:center;font-weight:800}
+.auto-hint{text-align:center;font-size:11px;color:#8aa0b8;margin-top:5px}
+.auto-quick{display:flex;gap:6px;margin-top:8px}
+.auto-quick button{flex:1;border:none;padding:9px 2px;border-radius:8px;font-weight:700;cursor:pointer;font-size:12px;background:#1e354d;color:#fff}
+.last-crash{margin-top:10px;text-align:center;font-size:12px;color:#8aa0b8}
+.last-crash b{font-size:14px}
+.bets-box{background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:14px;margin-top:16px}
+.bets-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.bets-header h3{font-size:14px}
+.bets-total{font-size:12px;color:#8aa0b8}
+.bets-total b{color:#fff;font-size:13px}
+.withdraw-feed{background:#081522;border:1px solid #1e354d;border-radius:10px;padding:8px 10px;margin-bottom:10px;min-height:38px;font-size:12px}
+.withdraw-feed .feed-title{font-size:10px;letter-spacing:1px;color:#8aa0b8;font-weight:800;margin-bottom:4px}
+.feed-item{padding:4px 0;border-bottom:1px solid #1a2c42}
+.feed-item:last-child{border-bottom:none}
+.feed-item b{color:#00e6a0}
+.bets-list{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto}
+.bet-row{display:flex;justify-content:space-between;align-items:center;background:#081522;border:1px solid #1a2c42;border-radius:10px;padding:9px 10px;font-size:12px}
+.bet-row.me{border-color:#00e6a0;background:#0a2a20}
+.bet-left{display:flex;align-items:center;gap:8px;min-width:0}
+.bet-avatar{width:26px;height:26px;border-radius:50%;background:#1e354d;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;flex-shrink:0}
+.bet-row.me .bet-avatar{background:#00e6a0;color:#04120c}
+.bet-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bet-name small{display:block;color:#8aa0b8;font-weight:400;font-size:10px}
+.bet-right{text-align:right;flex-shrink:0}
+.bet-right b{font-size:12px}
+.bet-status{font-size:10px;font-weight:800}
+.status-playing{color:#ffb938}.status-cashed{color:#00e6a0}.status-lost{color:#ff5d70}
+.withdraw-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#0a2a20;border:1px solid #00e6a0;color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:700;z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;text-align:center}
+.withdraw-bar{background:#081522;border:1px solid #ffb938;border-radius:12px;padding:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.withdraw-bar b{font-size:13px}
+.withdraw-bar small{display:block;color:#8aa0b8;font-size:11px}
+.withdraw-history{margin-top:16px;background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:15px}
+.withdraw-history h3{font-size:14px;margin-bottom:8px}
+.wd-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a2c42;font-size:13px}
+</style>
+</head>
+<body>
+<div class="withdraw-toast" id="withdrawToast"></div>
+<header>
+  <div class="logo-wrap">
+    <img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" alt="Studentsureplug Logo" class="logo-img">
+    <div class="logo-text"><b>STUDENT <span>SUREPLUG</span></b><br><small>PLAY SMART</small></div>
+  </div>
+  <div class="header-right" id="headerAuth">
+    <button class="btn btn-outline btn-small" onclick="openAuth('login')">Login</button>
+    <button class="btn btn-green btn-small" onclick="openAuth('signup')">Sign Up</button>
+  </div>
+</header>
+<div class="container">
+  <div class="top-stats">
+    <div class="stat"><small><span class="live-dot"></span> LIVE PLAYERS</small><b id="livePlayers">1,248</b></div>
+    <div class="stat"><small>YOUR BALANCE</small><b style="color:#00e6a0">₦<span id="balance">0</span></b></div>
+  </div>
+
+  <div class="withdraw-bar">
+    <div><b>💸 Withdraw Your Winnings</b><small>Min ₦500 • Pays in 5-15 mins</small></div>
+    <button class="btn btn-withdraw btn-small" onclick="openWithdraw()">WITHDRAW</button>
+  </div>
+
+  <div class="game-box" style="margin-top:12px">
+    <div class="sound-row"><span>🔊 Game Sound</span><button class="sound-btn on" id="soundBtn" onclick="toggleSound()">SOUND ON</button></div>
+    <div class="status" id="status">NEXT ROUND STARTING...</div>
+    <div class="multiplier waiting" id="multiplier">Waiting...</div>
+    <div class="round-info" id="countdown">Next round in 7s</div>
+    <canvas id="chart"></canvas>
+    <div class="controls">
+      <label>Enter your virtual stake (₦)</label>
+      <input type="number" id="stake" value="500" min="10" inputmode="decimal">
+      <div class="quick">
+        <button onclick="setStake(100,this)">₦100</button>
+        <button onclick="setStake(500,this)" class="active">₦500</button>
+        <button onclick="setStake(1000,this)">₦1,000</button>
+        <button onclick="setStake(2000,this)">₦2,000</button>
+      </div>
+      <div class="auto-box">
+        <div class="auto-header"><span>Auto Cash Out</span><button class="auto-toggle on" id="autoToggle" onclick="toggleAutoCash()">ON</button></div>
+        <div class="auto-input-wrap" id="autoInputWrap">
+          <label style="text-align:center">Auto Cash Out At — Tap to type</label>
+          <input type="number" id="autoCashValue" class="auto-input" value="2.00" inputmode="decimal" step="0.01" min="1.10" placeholder="2.00">
+          <div class="auto-hint">Tap the box above — your phone keypad will open</div>
+          <div class="auto-quick">
+            <button onclick="keypadQuick('1.50')">1.50x</button>
+            <button onclick="keypadQuick('2.00')">2.00x</button>
+            <button onclick="keypadQuick('5.00')">5.00x</button>
+          </div>
+        </div>
+      </div>
+      <div class="toggle-row"><span>🔁 Auto Join Every Round</span><input type="checkbox" id="autoJoin" checked></div>
+      <div class="actions">
+        <button class="start" id="startBtn" onclick="joinNextRound()">JOIN NEXT ROUND</button>
+        <button class="cash" id="cashBtn" onclick="cashOut()" disabled>CASH OUT</button>
+      </div>
+      <div class="message" id="message">Game runs forever. Join any round you want.</div>
+    </div>
+  </div>
+
+  <div class="history"><h3>Coefficients</h3><div class="history-list" id="history"><span class="history-item">No coefficients yet</span></div><div class="last-crash" id="lastCrash">Last round: <b>—</b></div></div>
+
+  <div class="bets-box">
+    <div class="bets-header"><h3>👥 Live Bets</h3><div class="bets-total">Total Staked: <b id="totalStaked">₦0</b> • <span id="betsCount">0</span> players</div></div>
+    <div class="withdraw-feed"><div class="feed-title">💸 LIVE WITHDRAWALS</div><div id="withdrawFeed"><span style="color:#8aa0b8">No withdrawals yet this round...</span></div></div>
+    <div class="bets-list" id="betsList"><div style="text-align:center;color:#8aa0b8;font-size:12px;padding:12px">Waiting for players to join...</div></div>
+  </div>
+
+  <div class="withdraw-history"><h3>💸 My Withdrawals</h3><div id="myWithdrawals"><span style="color:#8aa0b8;font-size:12px">No withdrawals yet</span></div></div>
+
+  <div class="leader">
+    <h3 style="font-size:15px;margin-bottom:6px">🏆 Top Players Today</h3>
+    <div class="leader-row"><span>1. @chiamaka_</span><b style="color:#00e6a0">₦48,500</b></div>
+    <div class="leader-row"><span>2. @tunde_</span><b style="color:#00e6a0">₦32,200</b></div>
+    <div class="leader-row"><span>3. @adaeze</span><b style="color:#00e6a0">₦27,800</b></div>
+    <div class="leader-row"><span>4. @you</span><b id="leaderYou">₦0</b></div>
+  </div>
+</div>
+<footer><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="footer-logo"><br>© 2026 Studentsureplug. All rights reserved.<br>Support Ur School Upkeep<br>Play responsibly.</footer>
+
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" alt="Studentsureplug" class="modal-logo">
+    <h2>Welcome to Studentsureplug</h2><p>Create an account to play</p>
+    <div class="tabs"><button id="tabSignup" class="active" onclick="switchTab('signup')">Sign Up</button><button id="tabLogin" onclick="switchTab('login')">Login</button></div>
+    <div id="signupForm"><label>Username</label><input id="suName" placeholder="e.g. chioma_"><label>Password</label><input id="suPass" type="password" placeholder="Create password"><button class="btn btn-green" style="width:100%;margin-top:10px" onclick="doSignup()">Create Account & Get ₦10,000</button></div>
+    <div id="loginForm" style="display:none"><label>Username</label><input id="liName" placeholder="Your username"><label>Password</label><input id="liPass" type="password" placeholder="Your password"><button class="btn btn-green" style="width:100%;margin-top:10px" onclick="doLogin()">Login</button></div>
+    <p id="authMsg" style="text-align:center;color:#ff5d70;margin-top:10px;min-height:18px"></p><span class="link" onclick="closeAuth()">Close</span>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div class="modal" id="withdrawModal">
+  <div class="modal-content">
+    <h2>💸 Withdraw</h2><p>Balance: <b style="color:#00e6a0">₦<span id="wdBalance">0</span></b> • Min ₦500</p>
+    <label>Amount to Withdraw (₦)</label><input id="wdAmount" type="number" placeholder="e.g. 5000" inputmode="decimal">
+    <div style="display:flex;gap:6px;margin:8px 0"><button class="btn btn-outline btn-small" style="flex:1" onclick="document.getElementById('wdAmount').value=1000">₦1,000</button><button class="btn btn-outline btn-small" style="flex:1" onclick="document.getElementById('wdAmount').value=5000">₦5,000</button><button class="btn btn-outline btn-small" style="flex:1" onclick="document.getElementById('wdAmount').value=10000">₦10,000</button></div>
+    <label>Bank</label><select id="wdBank"><option value="">Select Bank</option><option>Access Bank</option><option>GTBank</option><option>First Bank</option><option>UBA</option><option>OPay</option><option>Palmpay</option><option>Moniepoint</option><option>Kuda</option><option>Zenith Bank</option><option>Union Bank</option></select>
+    <label style="margin-top:10px">Account Number</label><input id="wdAcct" placeholder="10-digit account number" inputmode="numeric" maxlength="10">
+    <label style="margin-top:10px">Account Name</label><input id="wdName" placeholder="Name on account">
+    <button class="btn btn-withdraw" style="width:100%;margin-top:14px" onclick="doWithdraw()">CONFIRM WITHDRAW</button>
+    <p id="wdMsg" style="text-align:center;color:#ff5d70;margin-top:10px;min-height:18px"></p>
+    <span class="link" onclick="closeWithdraw()">Close</span>
+  </div>
+</div>
+
+<script>
+let users = JSON.parse(localStorage.getItem('ssp_users')||'{}');
+let currentUser = localStorage.getItem('ssp_current')||null;
+let balance=0, stake=0, multiplier=1, crashPoint=0, playing=false, inRound=false, joinedThisRound=false, cashedOut=false, gameInterval=null, history=[];
+let totalWon=0, roundNum=1, countdownVal=7, countdownTimer=null;
+let autoCashOn=true, soundOn=true, audioCtx=null;
+let lastCrashValue=0;
+let liveBets=[]; let withdrawFeed=[];
+let myWithdrawals = JSON.parse(localStorage.getItem('ssp_withdrawals')||'[]');
+const fakeNames=['chiamaka_','tunde_','adaeze','emeka_','funmi','blessing_','ifeanyi','zainab_','chidi_','amara_','oluchi','kemi_','david_','sarah_','mike_','ngozi','chinedu','fatima','uche_','tolu'];
+const balanceEl=document.getElementById('balance'), multEl=document.getElementById('multiplier'),
+statusEl=document.getElementById('status'), msgEl=document.getElementById('message'),
+startBtn=document.getElementById('startBtn'), cashBtn=document.getElementById('cashBtn'),
+canvas=document.getElementById('chart'), ctx=canvas.getContext('2d'),
+countdownEl=document.getElementById('countdown');
+let points=[5];
+function toggleSound(){soundOn=!soundOn;let b=document.getElementById('soundBtn');if(soundOn){b.textContent='SOUND ON';b.className='sound-btn on';playSound('click');}else{b.textContent='SOUND OFF';b.className='sound-btn off';}}
+function playSound(type){ if(!soundOn) return; try{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); let osc=audioCtx.createOscillator(), gain=audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); let now=audioCtx.currentTime; if(type==='click'){osc.frequency.setValueAtTime(600,now);osc.type='sine';gain.gain.setValueAtTime(0.15,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.08);osc.start(now);osc.stop(now+0.08);} if(type==='win'){osc.type='sine';osc.frequency.setValueAtTime(523,now);osc.frequency.setValueAtTime(784,now+0.1);osc.frequency.setValueAtTime(1046,now+0.2);gain.gain.setValueAtTime(0.2,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.4);osc.start(now);osc.stop(now+0.4);} if(type==='crash'){osc.type='sawtooth';osc.frequency.setValueAtTime(300,now);osc.frequency.exponentialRampToValueAtTime(50,now+0.5);gain.gain.setValueAtTime(0.25,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.5);osc.start(now);osc.stop(now+0.5);} if(type==='start'){osc.type='sine';osc.frequency.setValueAtTime(440,now);osc.frequency.setValueAtTime(660,now+0.08);gain.gain.setValueAtTime(0.15,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.15);osc.start(now);osc.stop(now+0.15);} if(type==='tick'){osc.type='sine';osc.frequency.setValueAtTime(900,now);gain.gain.setValueAtTime(0.05,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.05);osc.start(now);osc.stop(now+0.05);} }catch(e){} }
+function generateCrashPoint(){ let r=Math.random(); let crash=0.97/(1-r); if(Math.random()<0.02) crash=1+Math.random()*0.1; if(Math.random()<0.05) crash=10+Math.random()*70; if(crash>100) crash=100; if(crash<1) crash=1; return crash; }
+function saveUsers(){localStorage.setItem('ssp_users',JSON.stringify(users));}
+function saveCurrent(){if(currentUser){users[currentUser].balance=balance;users[currentUser].won=totalWon;saveUsers();}}
+function updateUI(){ balanceEl.textContent=balance.toLocaleString('en-NG'); document.getElementById('leaderYou').textContent='₦'+totalWon.toLocaleString('en-NG'); const h=document.getElementById('headerAuth'); if(currentUser){h.innerHTML=`<div class="user-chip"><div class="avatar">${currentUser[0].toUpperCase()}</div><b>@${currentUser}</b></div><button class="btn btn-withdraw btn-small" onclick="openWithdraw()">Withdraw</button><button class="btn btn-outline btn-small" onclick="logout()">Logout</button>`;} else{h.innerHTML=`<button class="btn btn-outline btn-small" onclick="openAuth('login')">Login</button><button class="btn btn-green btn-small" onclick="openAuth('signup')">Sign Up</button>`;} }
+function openAuth(m){document.getElementById('authModal').style.display='flex';switchTab(m);}
+function closeAuth(){document.getElementById('authModal').style.display='none';}
+function switchTab(m){document.getElementById('tabSignup').classList.toggle('active',m==='signup');document.getElementById('tabLogin').classList.toggle('active',m==='login');document.getElementById('signupForm').style.display=m==='signup'?'block':'none';document.getElementById('loginForm').style.display=m==='login'?'block':'none';}
+function doSignup(){let u=document.getElementById('suName').value.trim().toLowerCase(),p=document.getElementById('suPass').value;if(u.length<3)return showAuth('Username must be at least 3 letters');if(p.length<4)return showAuth('Password must be at least 4 characters');if(users[u])return showAuth('Username already exists, please login');users[u]={pass:p,balance:10000,won:0};saveUsers();currentUser=u;localStorage.setItem('ssp_current',u);balance=10000;totalWon=0;closeAuth();updateUI();msgEl.textContent='Welcome @'+u+'! You got ₦10,000 free virtual money.';playSound('win');}
+function doLogin(){let u=document.getElementById('liName').value.trim().toLowerCase(),p=document.getElementById('liPass').value;if(!users[u]||users[u].pass!==p)return showAuth('Wrong username or password');currentUser=u;localStorage.setItem('ssp_current',u);balance=users[u].balance||0;totalWon=users[u].won||0;closeAuth();updateUI();msgEl.textContent='Welcome back @'+u+'!';playSound('win');}
+function showAuth(t){document.getElementById('authMsg').textContent=t;}
+function logout(){currentUser=null;localStorage.removeItem('ssp_current');balance=0;totalWon=0;joinedThisRound=false;playing=false;updateUI();msgEl.textContent='Logged out. Login to continue playing.';}
+// WITHDRAW
+function openWithdraw(){ if(!currentUser) return openAuth('signup'); document.getElementById('wdBalance').textContent=balance.toLocaleString('en-NG'); document.getElementById('wdMsg').textContent=''; document.getElementById('withdrawModal').style.display='flex'; }
+function closeWithdraw(){ document.getElementById('withdrawModal').style.display='none'; }
+function renderMyWithdrawals(){ let el=document.getElementById('myWithdrawals'); let mine=myWithdrawals.filter(w=>w.user===currentUser); if(!currentUser || mine.length===0){ el.innerHTML='<span style="color:#8aa0b8;font-size:12px">No withdrawals yet</span>'; return; } el.innerHTML=mine.slice().reverse().map(w=>`<div class="wd-row"><span>₦${w.amount.toLocaleString('en-NG')} • ${w.bank} • ${w.acct}</span><b style="color:#ffb938">${w.status}</b></div>`).join(''); }
+function doWithdraw(){ let amt=Number(document.getElementById('wdAmount').value); let bank=document.getElementById('wdBank').value; let acct=document.getElementById('wdAcct').value.trim(); let name=document.getElementById('wdName').value.trim(); let msg=document.getElementById('wdMsg'); if(!Number.isFinite(amt)||amt<500) return msg.textContent='Minimum withdraw is ₦500'; if(amt>balance) return msg.textContent='Insufficient balance'; if(!bank) return msg.textContent='Select your bank'; if(acct.length!==10) return msg.textContent='Account number must be 10 digits'; if(name.length<3) return msg.textContent='Enter account name'; balance-=amt; updateUI(); saveCurrent(); myWithdrawals.push({user:currentUser,amount:amt,bank,acct,name,status:'PENDING',time:Date.now()}); localStorage.setItem('ssp_withdrawals',JSON.stringify(myWithdrawals)); renderMyWithdrawals(); msg.style.color='#00e6a0'; msg.textContent='Withdraw request sent! You will receive ₦'+amt.toLocaleString('en-NG')+' in 5-15 mins.'; playSound('win'); setTimeout(()=>{ closeWithdraw(); msgEl.textContent='Withdraw of ₦'+amt.toLocaleString('en-NG')+' requested. Check My Withdrawals below.'; },1500); }
+function setStake(a,btn){if(inRound)return;document.getElementById('stake').value=a;document.querySelectorAll('.quick button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');playSound('click');}
+function toggleAutoCash(){autoCashOn=!autoCashOn;let b=document.getElementById('autoToggle');let w=document.getElementById('autoInputWrap');if(autoCashOn){b.textContent='ON';b.className='auto-toggle on';w.classList.remove('hide');}else{b.textContent='OFF';b.className='auto-toggle off';w.classList.add('hide');}playSound('click');}
+function keypadQuick(v){document.getElementById('autoCashValue').value=v;playSound('click');}
+function getAuto(){let v=parseFloat(document.getElementById('autoCashValue').value);if(!Number.isFinite(v)||v<1.1)return 0;return v;}
+function fixCanvas(){canvas.width=canvas.offsetWidth;canvas.height=220;drawChart();}
+function drawChart(){ const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h); ctx.strokeStyle='#1e354d';ctx.lineWidth=1; for(let i=1;i<5;i++){let y=(h/5)*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();} if(points.length<2)return; ctx.beginPath();ctx.strokeStyle='#00e6a0';ctx.lineWidth=3; points.forEach((pt,i)=>{let x=(i/100)*w;let y=h-pt;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}); ctx.stroke(); }
+function resetChart(){points=[5];drawChart();}
+function updateCashButton(){ if(playing && !cashedOut && inRound){ let win=Math.floor(stake*multiplier); cashBtn.textContent='CASH OUT ₦'+win.toLocaleString('en-NG'); } }
+function randomStake(){ let opts=[100,200,300,500,500,800,1000,1500,2000,3000,5000,10000]; return opts[Math.floor(Math.random()*opts.length)]; }
+function generateLiveBets(){ liveBets=[]; withdrawFeed=[]; document.getElementById('withdrawFeed').innerHTML='<span style="color:#8aa0b8">No withdrawals yet this round...</span>'; let count=8+Math.floor(Math.random()*10); let used=new Set(); for(let i=0;i<count;i++){ let name; do{ name=fakeNames[Math.floor(Math.random()*fakeNames.length)]; }while(used.has(name)); used.add(name); let s=randomStake(); let auto=1.2+Math.random()*4; if(Math.random()<0.25) auto=999; liveBets.push({name, stake:s, auto: auto, status:'playing', win:0, cashAt:0, isMe:false}); } if(joinedThisRound && currentUser){ let s=Number(document.getElementById('stake').value); liveBets.unshift({name: currentUser, stake:s, auto: getAuto()||999, status:'playing', win:0, cashAt:0, isMe:true}); } renderLiveBets(); }
+function renderLiveBets(){ let total=liveBets.reduce((a,b)=>a+b.stake,0); document.getElementById('totalStaked').textContent='₦'+total.toLocaleString('en-NG'); document.getElementById('betsCount').textContent=liveBets.length; if(liveBets.length===0){document.getElementById('betsList').innerHTML='<div style="text-align:center;color:#8aa0b8;font-size:12px;padding:12px">Waiting for players to join...</div>';return;} let sorted=[...liveBets].sort((a,b)=> (b.isMe?1:0)-(a.isMe?1:0)); document.getElementById('betsList').innerHTML=sorted.map(p=>{ let right=''; if(p.status==='playing'){ right=`<b>₦${p.stake.toLocaleString('en-NG')}</b><div class="bet-status status-playing">● PLAYING • Staked ₦${p.stake.toLocaleString('en-NG')}</div>`; } else if(p.status==='cashed'){ right=`<b style="color:#00e6a0">₦${p.win.toLocaleString('en-NG')}</b><div class="bet-status status-cashed">WITHDREW @ ${p.cashAt.toFixed(2)}x</div>`; } else { right=`<b style="color:#ff5d70">-₦${p.stake.toLocaleString('en-NG')}</b><div class="bet-status status-lost">LOST • No Withdraw</div>`; } return `<div class="bet-row ${p.isMe?'me':''}"><div class="bet-left"><div class="bet-avatar">${p.name[0].toUpperCase()}</div><div class="bet-name">@${p.name}${p.isMe?' (You)':''}<small>Staked ₦${p.stake.toLocaleString('en-NG')} ${p.status==='playing'?'• Waiting to withdraw':p.status==='cashed'?'• Withdrew':''}</small></div></div><div class="bet-right">${right}</div></div>`; }).join(''); }
+function addWithdrawFeed(name, stake, win, at, isMe){ withdrawFeed.unshift({name, stake, win, at, isMe}); withdrawFeed=withdrawFeed.slice(0,4); document.getElementById('withdrawFeed').innerHTML=withdrawFeed.map(f=>`<div class="feed-item">💸 <b>@${f.name}${f.isMe?' (You)':''}</b> staked ₦${f.stake.toLocaleString('en-NG')} → withdrew <b>₦${f.win.toLocaleString('en-NG')}</b> @ ${f.at.toFixed(2)}x</div>`).join(''); let toast=document.getElementById('withdrawToast'); toast.innerHTML=`💸 @${name} withdrew <b>₦${win.toLocaleString('en-NG')}</b> @ ${at.toFixed(2)}x`; toast.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>{toast.style.display='none';},2500); }
+function updateLiveBetsOnTick(){ let changed=false; liveBets.forEach(p=>{ if(p.isMe) return; if(p.status==='playing' && multiplier>=p.auto && p.auto!==999){ p.status='cashed'; p.cashAt=multiplier; p.win=Math.floor(p.stake*multiplier); changed=true; addWithdrawFeed(p.name, p.stake, p.win, multiplier, false); } }); if(changed) renderLiveBets(); }
+function updateLiveBetsOnCrash(){ liveBets.forEach(p=>{ if(p.status==='playing'){ p.status='lost'; } }); renderLiveBets(); }
+function updateMyBetOnCashOut(win, at){ let me=liveBets.find(p=>p.isMe); if(me){ me.status='cashed'; me.cashAt=at; me.win=win; renderLiveBets(); } }
+function joinNextRound(){ if(!currentUser)return openAuth('signup'); if(inRound)return msgEl.textContent='Round already started. Wait for next round.'; if(joinedThisRound)return msgEl.textContent='You are already in the next round.'; let s=Number(document.getElementById('stake').value); if(!Number.isFinite(s)||s<10)return msgEl.textContent='Enter at least ₦10 stake.'; if(s>balance)return msgEl.textContent='Insufficient balance.'; joinedThisRound=true;startBtn.textContent='JOINED ✓ - WAITING FOR ROUND';startBtn.disabled=true; msgEl.textContent=`You joined with ₦${s.toLocaleString('en-NG')}. Good luck!`;playSound('click'); }
+function startWaiting(){ inRound=false;joinedThisRound=false;playing=false;cashedOut=false; multEl.textContent='Waiting...';multEl.className='multiplier waiting'; statusEl.textContent='PLACE YOUR STAKE - NEXT ROUND STARTING';statusEl.style.color='#ffb938'; countdownVal=4+Math.floor(Math.random()*6);countdownEl.textContent='Next round in '+countdownVal+'s'; startBtn.disabled=false;startBtn.textContent='JOIN NEXT ROUND';cashBtn.disabled=true;cashBtn.textContent='CASH OUT';resetChart(); liveBets=[]; withdrawFeed=[]; document.getElementById('totalStaked').textContent='₦0'; document.getElementById('betsCount').textContent='0'; document.getElementById('withdrawFeed').innerHTML='<span style="color:#8aa0b8">No withdrawals yet this round...</span>'; document.getElementById('betsList').innerHTML='<div style="text-align:center;color:#8aa0b8;font-size:12px;padding:12px">Players are joining... Place your stake!</div>'; if(document.getElementById('autoJoin').checked && currentUser && balance>=10){setTimeout(()=>{if(!inRound && !joinedThisRound){joinNextRound();}},800);} clearInterval(countdownTimer); countdownTimer=setInterval(()=>{countdownVal--;if(countdownVal>0){countdownEl.textContent='Next round in '+countdownVal+'s';if(countdownVal<=3)playSound('tick');}else{clearInterval(countdownTimer);startRound();}},1000); }
+function startRound(){ inRound=true;playSound('start'); if(document.getElementById('autoJoin').checked && !joinedThisRound && currentUser && balance>=10){joinNextRound();} if(joinedThisRound && currentUser){ stake=Number(document.getElementById('stake').value); if(stake>balance){joinedThisRound=false;playing=false;} else{balance-=stake;playing=true;updateUI();saveCurrent();} } else {playing=false;stake=0;} multiplier=1;crashPoint=generateCrashPoint(); generateLiveBets(); statusEl.textContent='ROUND IS RUNNING';statusEl.style.color='#00e6a0'; countdownEl.textContent='Round in progress...';multEl.className='multiplier'; startBtn.disabled=true;startBtn.textContent='ROUND IN PROGRESS';cashBtn.disabled=!playing; if(playing){cashBtn.textContent='CASH OUT ₦'+stake.toLocaleString('en-NG');msgEl.textContent='You are in this round. Watch and cash out!';} else {cashBtn.textContent='CASH OUT';msgEl.textContent='You are watching this round. Join the next one!';} clearInterval(gameInterval); function tick(){ if(!inRound) return; let roll=Math.random(); let growth=0; if(roll<0.30) growth=0.001+Math.random()*0.002; else if(roll<0.75) growth=0.003+Math.random()*0.004; else if(roll<0.95) growth=0.006+Math.random()*0.005; else growth=0.010+Math.random()*0.006; multiplier+=growth+multiplier*growth*0.25; multEl.textContent=multiplier.toFixed(2)+'x'; points.push(Math.min(200,5+multiplier*18));if(points.length>100)points.shift();drawChart(); updateCashButton(); updateLiveBetsOnTick(); if(playing && !cashedOut && autoCashOn){ let auto=getAuto(); if(auto>0 && multiplier>=auto){ cashOut(); } } if(multiplier>=crashPoint){endRound();return;} gameInterval=setTimeout(tick,220+Math.random()*130); } tick(); }
+function cashOut(){ if(!playing||cashedOut||!inRound)return; let win=Math.floor(stake*multiplier);balance+=win;totalWon+=win;updateUI();saveCurrent(); cashedOut=true;playing=false;cashBtn.disabled=true; cashBtn.textContent='CASHED ₦'+win.toLocaleString('en-NG'); statusEl.textContent='CASHED OUT AT '+multiplier.toFixed(2)+'x • ROUND STILL RUNNING';statusEl.style.color='#00e6a0'; msgEl.textContent=`You received ₦${win.toLocaleString('en-NG')}! Line keeps moving until crash...`; updateMyBetOnCashOut(win, multiplier); addWithdrawFeed(currentUser, stake, win, multiplier, true); playSound('win'); }
+function endRound(){ clearTimeout(gameInterval);clearInterval(gameInterval); inRound=false; multEl.textContent=crashPoint.toFixed(2)+'x';multEl.classList.add('crashed'); statusEl.textContent='CRASHED AT '+crashPoint.toFixed(2)+'x';statusEl.style.color='#ff5d70'; countdownEl.textContent='Next round in 4s...'; updateLiveBetsOnCrash(); lastCrashValue=crashPoint; addHistory(crashPoint,false); updateLastCrash(); if(playing && !cashedOut){msgEl.textContent='Round over. Your stake was lost. Next round coming...';cashBtn.textContent='CASH OUT';} else if(cashedOut){msgEl.textContent=`Round ended at ${crashPoint.toFixed(2)}x. You already cashed out. Check Coefficients below.`;} else if(!joinedThisRound){msgEl.textContent=`Round ended at ${crashPoint.toFixed(2)}x. Next round coming...`;} playSound('crash'); if(playing && !cashedOut)saveCurrent(); playing=false;cashBtn.disabled=true;roundNum++;updateUI(); setTimeout(()=>{startWaiting();},3000+Math.random()*2000); }
+function updateLastCrash(){ let el=document.getElementById('lastCrash'); let color=getHistoryColor(lastCrashValue); el.innerHTML=`Last round: <b class="${color}">${lastCrashValue.toFixed(2)}x</b>`; }
+function getHistoryColor(v){ if(v>=10) return 'green'; if(v<=1.05) return 'red'; return 'blue'; }
+function renderHistory(){ if(history.length===0){document.getElementById('history').innerHTML='<span class="history-item">No coefficients yet</span>';return;} document.getElementById('history').innerHTML=history.map(h=>{ let v=parseFloat(h.value); let color=getHistoryColor(v); return `<span class="history-item ${color}">${h.value}x</span>`; }).join(''); }
+function addHistory(v,won){ history.unshift({value:v.toFixed(2),won});history=history.slice(0,12); renderHistory(); }
+if(currentUser && users[currentUser]){balance=users[currentUser].balance||10000;totalWon=users[currentUser].won||0;}
+setInterval(()=>{document.getElementById('livePlayers').textContent=(1200+Math.floor(Math.random()*80)).toLocaleString();},3000);
+window.addEventListener('resize',fixCanvas);
+fixCanvas();updateUI();renderMyWithdrawals();startWaiting();
+if(!currentUser){msgEl.textContent='Please Sign Up or Login to play. You get ₦10,000 free. Game runs forever.';}
+</script>
+</body>
+</html>
