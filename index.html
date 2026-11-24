@@ -2,291 +2,308 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Studentsureplug</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>STUDENT SUREPLUG</title>
 <link rel="icon" href="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg">
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{background:#060f1c;color:#fff}
-header{background:#0d1d30;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #22364f;position:sticky;top:0;z-index:10}
-.logo-wrap{display:flex;align-items:center;gap:10px}
-.logo-img{height:48px;width:auto;max-width:150px;border-radius:10px;object-fit:contain;background:transparent;display:block}
-.logo-text{line-height:1.2}
-.logo-text b{font-size:17px;letter-spacing:.5px}
-.logo-text b span{color:#00e6a0}
-.logo-text small{font-size:11px;color:#8aa0b8;letter-spacing:2px}
-.header-right{display:flex;gap:8px;align-items:center}
-.btn{border:none;cursor:pointer;font-weight:700;border-radius:10px;padding:11px 16px;font-size:14px}
-.btn-green{background:#00e6a0;color:#04120c}
-.btn-outline{background:transparent;color:#fff;border:1px solid #3a5575}
-.btn-small{padding:8px 12px;font-size:13px}
-.btn-withdraw{background:#ffb938;color:#251800}
-.container{max-width:620px;margin:auto;padding:14px}
-.top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.stat{background:#0d1d30;border:1px solid #22364f;border-radius:12px;padding:12px;text-align:center}
-.stat small{color:#8aa0b8;font-size:11px;display:block}
-.stat b{font-size:16px}
-.live-dot{width:8px;height:8px;background:#00e6a0;border-radius:50%;display:inline-block;animation:pulse 1s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
-.game-box{background:#0d1d30;border:1px solid #22364f;border-radius:18px;padding:16px}
-.sound-row{display:flex;justify-content:space-between;align-items:center;background:#081522;border:1px solid #22364f;border-radius:10px;padding:9px 12px;margin-bottom:10px}
-.sound-row span{font-size:13px;font-weight:700}
-.sound-btn{border:none;cursor:pointer;padding:7px 14px;border-radius:20px;font-weight:800;font-size:11px}
-.sound-btn.on{background:#00e6a0;color:#04120c}
-.sound-btn.off{background:#2a3545;color:#8aa0b8}
-.status{text-align:center;color:#00e6a0;font-size:12px;letter-spacing:1px;font-weight:800}
-.multiplier{font-size:54px;font-weight:900;text-align:center;margin:8px 0;color:#00e6a0}
-.multiplier.crashed{color:#ff5d70}
-.multiplier.waiting{color:#ffb938}
-canvas{display:block;width:100%;height:220px;background:#071522;border-radius:12px}
-.controls{margin-top:16px}
-label{font-size:13px;color:#cbd5e1;display:block;margin-bottom:6px}
-input,select{width:100%;padding:14px;border:1px solid #33485e;background:#081522;color:#fff;border-radius:10px;outline:none;font-size:15px}
-.quick{display:flex;gap:8px;margin-top:10px}
-.quick button{flex:1;background:#1e354d;color:#fff;border:none;padding:11px 4px;border-radius:8px;cursor:pointer;font-weight:700}
-.quick button.active{background:#00e6a0;color:#04120c}
-.actions{display:flex;gap:10px;margin-top:14px}
-.actions button{flex:1;padding:15px 5px;border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer}
-.start{background:#00e6a0;color:#04120c}
-.cash{background:#ffb938;color:#251800}
-button:disabled{opacity:.4;cursor:not-allowed}
-.message{text-align:center;margin-top:12px;font-size:13px;min-height:20px;color:#a8b8cc}
-.history{margin-top:16px;background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:15px}
-.history h3{font-size:15px;margin-bottom:12px}
-.history-list{display:flex;flex-wrap:wrap;gap:8px}
-.history-item{background:#1e354d;padding:8px 12px;border-radius:20px;font-size:13px;font-weight:700}
-.green{color:#00e6a0}.red{color:#ff5d70}.blue{color:#4da6ff}
-.leader{background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:15px;margin-top:16px}
-.leader-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1a2c42;font-size:13px}
-footer{text-align:center;padding:22px;color:#6b7f96;font-size:12px;line-height:1.6}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;justify-content:center;align-items:center;padding:16px}
-.modal-content{background:#0d1d30;border:1px solid #2a415c;width:100%;max-width:400px;padding:24px;border-radius:18px}
-.modal-content h2{margin-bottom:6px;text-align:center}.modal-content p{color:#8aa0b8;font-size:13px;margin-bottom:14px;text-align:center}
-.tabs{display:flex;background:#071522;border-radius:10px;padding:4px;margin-bottom:14px}
-.tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:transparent;color:#8aa0b8;cursor:pointer;font-weight:700}
-.tabs button.active{background:#00e6a0;color:#04120c}
-.link{color:#00e6a0;cursor:pointer;font-size:13px;text-align:center;display:block;margin-top:12px}
-.user-chip{display:flex;align-items:center;gap:8px;background:#162c44;padding:6px 10px;border-radius:20px;font-size:13px}
-.avatar{width:28px;height:28px;background:#00e6a0;color:#04120c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
-.modal-logo{width:100%;max-width:220px;height:auto;border-radius:12px;object-fit:contain;margin:0 auto 10px;display:block;background:transparent}
-.footer-logo{width:110px;height:auto;border-radius:12px;object-fit:contain;margin-bottom:8px;background:transparent}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;background:#081522;border:1px solid #33485e;border-radius:10px;padding:12px;margin-top:12px;font-size:13px}
-.toggle-row input{width:auto;accent-color:#00e6a0}
-.round-info{text-align:center;font-size:12px;color:#8aa0b8;margin-top:8px}
-.auto-box{background:#081522;border:1px solid #33485e;border-radius:12px;padding:12px;margin-top:14px}
-.auto-header{display:flex;justify-content:space-between;align-items:center}
-.auto-header span{font-size:13px;font-weight:700}
-.auto-toggle{border:none;cursor:pointer;padding:8px 16px;border-radius:20px;font-weight:800;font-size:12px}
-.auto-toggle.off{background:#2a3545;color:#8aa0b8}
-.auto-toggle.on{background:#00e6a0;color:#04120c}
-.auto-input-wrap{margin-top:10px}
-.auto-input-wrap.hide{display:none}
-.auto-input{width:100%;padding:12px;border:1px solid #00e6a0;background:#071522;color:#fff;border-radius:8px;outline:none;font-size:18px;text-align:center;font-weight:800}
-.auto-hint{text-align:center;font-size:11px;color:#8aa0b8;margin-top:5px}
-.auto-quick{display:flex;gap:6px;margin-top:8px}
-.auto-quick button{flex:1;border:none;padding:9px 2px;border-radius:8px;font-weight:700;cursor:pointer;font-size:12px;background:#1e354d;color:#fff}
-.last-crash{margin-top:10px;text-align:center;font-size:12px;color:#8aa0b8}
-.last-crash b{font-size:14px}
-.bets-box{background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:14px;margin-top:16px}
-.bets-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.bets-header h3{font-size:14px}
-.bets-total{font-size:12px;color:#8aa0b8}
-.bets-total b{color:#fff;font-size:13px}
-.withdraw-feed{background:#081522;border:1px solid #1e354d;border-radius:10px;padding:8px 10px;margin-bottom:10px;min-height:38px;font-size:12px}
-.withdraw-feed .feed-title{font-size:10px;letter-spacing:1px;color:#8aa0b8;font-weight:800;margin-bottom:4px}
-.feed-item{padding:4px 0;border-bottom:1px solid #1a2c42}
-.feed-item:last-child{border-bottom:none}
-.feed-item b{color:#00e6a0}
-.bets-list{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto}
-.bet-row{display:flex;justify-content:space-between;align-items:center;background:#081522;border:1px solid #1a2c42;border-radius:10px;padding:9px 10px;font-size:12px}
-.bet-row.me{border-color:#00e6a0;background:#0a2a20}
-.bet-left{display:flex;align-items:center;gap:8px;min-width:0}
-.bet-avatar{width:26px;height:26px;border-radius:50%;background:#1e354d;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;flex-shrink:0}
-.bet-row.me .bet-avatar{background:#00e6a0;color:#04120c}
-.bet-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bet-name small{display:block;color:#8aa0b8;font-weight:400;font-size:10px}
-.bet-right{text-align:right;flex-shrink:0}
-.bet-right b{font-size:12px}
-.bet-status{font-size:10px;font-weight:800}
-.status-playing{color:#ffb938}.status-cashed{color:#00e6a0}.status-lost{color:#ff5d70}
-.withdraw-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#0a2a20;border:1px solid #00e6a0;color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:700;z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;text-align:center}
-.withdraw-bar{background:#081522;border:1px solid #ffb938;border-radius:12px;padding:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.withdraw-bar b{font-size:13px}
-.withdraw-bar small{display:block;color:#8aa0b8;font-size:11px}
-.withdraw-history{margin-top:16px;background:#0d1d30;border:1px solid #22364f;border-radius:14px;padding:15px}
-.withdraw-history h3{font-size:14px;margin-bottom:8px}
-.wd-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a2c42;font-size:13px}
+body{background:#0a0f1e;color:#fff;min-height:100vh;overflow-x:hidden}
+header{background:#0a0f1e;padding:10px 12px;position:sticky;top:0;z-index:10;border-bottom:1px solid #1a1e35}
+.header-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.logo-wrap{display:flex;align-items:center;gap:8px}.logo-img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #00e6a0}.logo-text b{font-size:15px;line-height:1;white-space:nowrap}.logo-text b span{color:#00e6a0}.logo-text small{font-size:8px;letter-spacing:2px;color:#ffd700;font-weight:700;display:block;margin-top:3px}
+.header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.bal-pill{font-size:12px;white-space:nowrap}.bal-pill b{color:#ffd700}
+.head-btn{border:none;font-size:14px;font-weight:700;cursor:pointer;padding:7px 12px;border-radius:8px;white-space:nowrap}.head-btn.dep{background:#00e6a0;color:#000}.head-btn.wd{background:#ff2d55;color:#fff}.head-btn.out{background:#1a1e35;color:#fff;border:1px solid #333}
+.wrap{max-width:460px;margin:auto;padding:0 10px 16px}
+.game{background:#0d1326;border-radius:14px;padding:12px;border:1px solid #1e293b;margin-top:10px}
+.soundrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.soundrow span{font-size:12px}.soundrow button{border:none;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer}.s-on{background:#00e6a0;color:#000}.s-off{background:#334155;color:#fff}.m-on{background:#ffd700;color:#000}.m-off{background:#334155;color:#fff}
+.plane-top{text-align:center}.next-round{font-size:12px;font-weight:700;background:rgba(0,0,0,.4);display:inline-block;padding:6px 12px;border-radius:20px;border:1px solid #333}.next-round b{color:#ffd700}.top-info{display:flex;justify-content:center;gap:6px;margin-top:8px}.pill{background:#12162e;border:1px solid #333;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700}.pill span{color:#ffd700}.pill.green{border-color:#00e6a0}.pill.green span{color:#00e6a0}
+.status{text-align:center;font-size:11px;letter-spacing:2px;color:#fff;padding:8px 0 0;font-weight:700}
+.mult{font-size:48px;font-weight:900;text-align:center;line-height:1;color:#00e6a0;min-height:52px}.mult.red{color:#ff2d55}
+.sub{font-size:11px;color:#8a90b0;text-align:center}
+canvas{display:block;width:100%;height:420px;background:#0a0f1e;border-radius:10px}
+.controls{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.bet-panel{background:#12162e;border:1px solid #222;border-radius:12px;padding:10px}.bet-panel.on{border-color:#00e6a0}
+.toggles{display:flex;justify-content:space-between;font-size:11px;color:#8a90b0;margin-bottom:8px}.toggles label{display:flex;align-items:center;gap:6px}.switch{width:32px;height:18px;background:#2a2f4d;border-radius:20px;position:relative;cursor:pointer;display:inline-block}.switch::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:.2s}.switch.on{background:#00e6a0}.switch.on::after{left:16px}
+.betrow{display:flex;gap:8px}.stake-box{flex:1.2;display:flex;align-items:center;background:#070816;border:1px solid #333;border-radius:10px;padding:4px}.stake-box button{width:36px;height:36px;border:1px solid #fff;border-radius:50%;background:transparent;color:#fff;font-size:18px;cursor:pointer}.stake-box input{flex:1;background:transparent;border:none;color:#fff;text-align:center;font-size:15px;font-weight:700;outline:none;width:40px}.betrow .bet-btn{flex:1;background:#00e6a0;color:#000;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;padding:10px}.betrow .bet-btn small{font-weight:400;font-size:10px}.betrow .bet-btn.cash{background:#ff2d55;color:#fff}.betrow .bet-btn.wait{background:#ff9500;color:#fff}
+.quick{display:flex;gap:6px;margin-top:8px}.quick button{flex:1;background:#1a1e35;color:#fff;border:1px solid #222;padding:9px;border-radius:8px;cursor:pointer;font-size:11px}.quick button.active{background:#00e6a0;color:#000;font-weight:800}
+.auto-box{background:#0a0f1e;border:1px solid #222;border-radius:10px;padding:10px;margin-top:8px}.auto-row{display:flex;justify-content:space-between;font-size:12px}.auto-box input{width:100%;padding:10px;background:#12162e;color:#fff;border:1px solid #00e6a0;border-radius:8px;text-align:center;font-size:16px;font-weight:800;margin-top:8px}.auto-hint{font-size:10px;color:#8a90b0;text-align:center;margin-top:4px}.auto-presets{display:flex;gap:6px;margin-top:8px}.auto-presets button{flex:1;background:#1a1e35;color:#fff;border:none;padding:8px;border-radius:8px;cursor:pointer}.auto-join{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px}.auto-join input{width:16px;height:16px;accent-color:#00e6a0}
+.msg{text-align:center;font-size:11px;color:#8a90b0;min-height:16px}
+.actions{display:flex;gap:8px}.actions button{flex:1;padding:12px;border:none;border-radius:10px;font-weight:800;cursor:pointer}.round-btn{background:#1a1e35;color:#fff;border:1px solid #333}.cash-btn{background:#ffb020;color:#000}
+.history{margin-top:12px;background:#070816;border:1px solid #222;border-radius:12px;padding:10px}.history-top{display:flex;justify-content:space-between;align-items:center}.history-top b{font-size:12px}.history-top span{font-size:10px;color:#8a90b0}.history-last{font-size:11px;margin:8px 0 6px;color:#8a90b0}.history-last b{font-size:16px}.history-last b.c-red{color:#ff2d55}.history-last b.c-blue{color:#3b82f6}.history-last b.c-green{color:#00e6a0}.history-list{display:flex;gap:6px;flex-wrap:wrap}.hist-pill{padding:6px 10px;border-radius:20px;font-size:12px;font-weight:800;border:1px solid #333;background:#12162e}.hist-pill.latest{border-color:#ffd700}.hist-pill.c-red{color:#ff2d55;border-color:#ff2d55}.hist-pill.c-blue{color:#3b82f6;border-color:#3b82f6}.hist-pill.c-green{color:#00e6a0;border-color:#00e6a0}
+.players{margin:12px 0;background:#12162e;border-radius:12px;padding:12px}.players h3{font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between}.players h3 span{font-size:11px;color:#8a90b0;font-weight:400}.feed{background:#0a0f1e;border:1px solid #222;border-radius:8px;padding:8px;font-size:11px;margin-bottom:8px}table{width:100%;border-collapse:collapse;font-size:11px}th{color:#8a90b0;text-align:left;padding:6px 3px;border-bottom:1px solid #222}td{padding:7px 3px;border-bottom:1px solid #222}.win{color:#00e6a0;font-weight:800}.lose{color:#ff5d70;font-weight:800}.playing{color:#ffd700;font-weight:700}
+footer{text-align:center;padding:14px;color:#8a90b0;font-size:10px}.footer-logo{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #00e6a0;margin-bottom:6px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99;justify-content:center;align-items:center;padding:10px}.box{background:#1a0033;width:100%;max-width:340px;padding:14px;border-radius:12px;border:2px solid #ffd700;max-height:92vh;overflow-y:auto}.box h2{text-align:center;font-size:14px;margin-bottom:6px}.box p{text-align:center;font-size:11px;margin-bottom:8px}.box input,.box select{width:100%;padding:10px;background:#070816;color:#fff;border:1px solid #444;border-radius:8px;margin:4px 0 8px}.box button{width:100%;padding:12px;border:none;border-radius:8px;font-weight:800;cursor:pointer}.link{color:#ffd700;text-align:center;display:block;margin-top:8px;cursor:pointer;font-size:11px}.modal-logo{width:120px;height:auto;border-radius:10px;display:block;margin:0 auto 6px}
+.toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#0a2a20;border:2px solid #ffd700;color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;z-index:200;display:none;max-width:92vw;text-align:center}
 </style>
 </head>
 <body>
-<div class="withdraw-toast" id="withdrawToast"></div>
+<div class="toast" id="toast"></div>
 <header>
-  <div class="logo-wrap">
-    <img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" alt="Studentsureplug Logo" class="logo-img">
-    <div class="logo-text"><b>STUDENT <span>SUREPLUG</span></b><br><small>PLAY SMART</small></div>
-  </div>
-  <div class="header-right" id="headerAuth">
-    <button class="btn btn-outline btn-small" onclick="openAuth('login')">Login</button>
-    <button class="btn btn-green btn-small" onclick="openAuth('signup')">Sign Up</button>
-  </div>
+<div class="header-top">
+<div class="logo-wrap"><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="logo-img"><div class="logo-text"><b>STUDENT <span>SUREPLUG</span></b><small>PLAY SMART</small></div></div>
+<div class="header-right" id="headerTop"><span class="bal-pill">Balance: <b>₦<span id="balTop">10,000</span></b></span><button class="head-btn dep" onclick="openDeposit()">Deposit</button><button class="head-btn wd" onclick="openWithdraw()">Withdraw</button><button class="head-btn out" onclick="logout()">Logout</button></div>
+</div>
 </header>
-<div class="container">
-  <div class="top-stats">
-    <div class="stat"><small><span class="live-dot"></span> LIVE PLAYERS</small><b id="livePlayers">1,248</b></div>
-    <div class="stat"><small>YOUR BALANCE</small><b style="color:#00e6a0">₦<span id="balance">0</span></b></div>
-  </div>
-
-  <div class="withdraw-bar">
-    <div><b>💸 Withdraw Your Winnings</b><small>Min ₦500 • Pays in 5-15 mins</small></div>
-    <button class="btn btn-withdraw btn-small" onclick="openWithdraw()">WITHDRAW</button>
-  </div>
-
-  <div class="game-box" style="margin-top:12px">
-    <div class="sound-row"><span>🔊 Game Sound</span><button class="sound-btn on" id="soundBtn" onclick="toggleSound()">SOUND ON</button></div>
-    <div class="status" id="status">NEXT ROUND STARTING...</div>
-    <div class="multiplier waiting" id="multiplier">Waiting...</div>
-    <div class="round-info" id="countdown">Next round in 7s</div>
-    <canvas id="chart"></canvas>
-    <div class="controls">
-      <label>Enter your virtual stake (₦)</label>
-      <input type="number" id="stake" value="500" min="10" inputmode="decimal">
-      <div class="quick">
-        <button onclick="setStake(100,this)">₦100</button>
-        <button onclick="setStake(500,this)" class="active">₦500</button>
-        <button onclick="setStake(1000,this)">₦1,000</button>
-        <button onclick="setStake(2000,this)">₦2,000</button>
-      </div>
-      <div class="auto-box">
-        <div class="auto-header"><span>Auto Cash Out</span><button class="auto-toggle on" id="autoToggle" onclick="toggleAutoCash()">ON</button></div>
-        <div class="auto-input-wrap" id="autoInputWrap">
-          <label style="text-align:center">Auto Cash Out At — Tap to type</label>
-          <input type="number" id="autoCashValue" class="auto-input" value="2.00" inputmode="decimal" step="0.01" min="1.10" placeholder="2.00">
-          <div class="auto-hint">Tap the box above — your phone keypad will open</div>
-          <div class="auto-quick">
-            <button onclick="keypadQuick('1.50')">1.50x</button>
-            <button onclick="keypadQuick('2.00')">2.00x</button>
-            <button onclick="keypadQuick('5.00')">5.00x</button>
-          </div>
-        </div>
-      </div>
-      <div class="toggle-row"><span>🔁 Auto Join Every Round</span><input type="checkbox" id="autoJoin" checked></div>
-      <div class="actions">
-        <button class="start" id="startBtn" onclick="joinNextRound()">JOIN NEXT ROUND</button>
-        <button class="cash" id="cashBtn" onclick="cashOut()" disabled>CASH OUT</button>
-      </div>
-      <div class="message" id="message">Game runs forever. Join any round you want.</div>
-    </div>
-  </div>
-
-  <div class="history"><h3>Coefficients</h3><div class="history-list" id="history"><span class="history-item">No coefficients yet</span></div><div class="last-crash" id="lastCrash">Last round: <b>—</b></div></div>
-
-  <div class="bets-box">
-    <div class="bets-header"><h3>👥 Live Bets</h3><div class="bets-total">Total Staked: <b id="totalStaked">₦0</b> • <span id="betsCount">0</span> players</div></div>
-    <div class="withdraw-feed"><div class="feed-title">💸 LIVE WITHDRAWALS</div><div id="withdrawFeed"><span style="color:#8aa0b8">No withdrawals yet this round...</span></div></div>
-    <div class="bets-list" id="betsList"><div style="text-align:center;color:#8aa0b8;font-size:12px;padding:12px">Waiting for players to join...</div></div>
-  </div>
-
-  <div class="withdraw-history"><h3>💸 My Withdrawals</h3><div id="myWithdrawals"><span style="color:#8aa0b8;font-size:12px">No withdrawals yet</span></div></div>
-
-  <div class="leader">
-    <h3 style="font-size:15px;margin-bottom:6px">🏆 Top Players Today</h3>
-    <div class="leader-row"><span>1. @chiamaka_</span><b style="color:#00e6a0">₦48,500</b></div>
-    <div class="leader-row"><span>2. @tunde_</span><b style="color:#00e6a0">₦32,200</b></div>
-    <div class="leader-row"><span>3. @adaeze</span><b style="color:#00e6a0">₦27,800</b></div>
-    <div class="leader-row"><span>4. @you</span><b id="leaderYou">₦0</b></div>
-  </div>
+<div class="wrap">
+<div class="game">
+<div class="soundrow"><span>🔊 Game Sound</span><button id="soundBtn" class="s-on" onclick="toggleSound()">SOUND ON</button></div>
+<div class="soundrow"><span>🎵 Background Music</span><button id="musicBtn" class="m-on" onclick="toggleMusic()">MUSIC ON</button></div>
+<div class="plane-top"><div class="next-round" id="msg">NEXT ROUND IN <b>4s</b> • PLACE YOUR 2 BETS!</div><div class="top-info"><div class="pill green">👥 <span id="playerCountPlane">1,245</span></div></div></div>
+<div class="status" id="status">ROUND IS RUNNING</div>
+<div class="mult" id="mult">1.00x</div>
+<div class="sub" id="flewLabel">Round in progress...</div>
+<canvas id="chart" width="360" height="420"></canvas>
+<div class="controls">
+<div class="bet-panel" id="panel0">
+<div class="toggles"><label>Auto Bet <span class="switch" id="swBet0" onclick="toggleAutoBet(0)"></span></label><label>Auto Cashout <span class="switch on" id="swCash0" onclick="toggleAutoCash(0)"></span></label></div>
+<div class="betrow"><div class="stake-box"><button type="button" data-act="minus" data-i="0">−</button><input id="stake0" type="number" value="100"><button type="button" data-act="plus" data-i="0">+</button></div><button class="bet-btn" id="betBtn0"><span id="betBtnTxt0">BET</span><br><small>NGN <span id="betLabel0">100.00</span></small></button></div>
+<div class="quick"><button onclick="setStake(0,50,this)">50</button><button onclick="setStake(0,100,this)" class="active">100</button><button onclick="setStake(0,500,this)">500</button><button onclick="setStake(0,1000,this)">1000</button></div>
+<div class="auto-box"><div class="auto-row"><span>Auto Cash Out</span><span class="switch on" id="swAuto0" onclick="toggleAutoCash(0)"></span></div><input id="autoVal0" type="number" value="2.00"><div class="auto-hint">Tap to type your cashout</div><div class="auto-presets"><button onclick="setAuto(0,1.5)">1.50x</button><button onclick="setAuto(0,2)">2.00x</button><button onclick="setAuto(0,5)">5.00x</button></div><label class="auto-join"><input type="checkbox" id="joinChk0" onchange="toggleAutoBetChk(0,this)"> Auto Join Every Round</label></div>
 </div>
-<footer><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="footer-logo"><br>© 2026 Studentsureplug. All rights reserved.<br>Support Ur School Upkeep<br>Play responsibly.</footer>
-
-<div class="modal" id="authModal">
-  <div class="modal-content">
-    <img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" alt="Studentsureplug" class="modal-logo">
-    <h2>Welcome to Studentsureplug</h2><p>Create an account to play</p>
-    <div class="tabs"><button id="tabSignup" class="active" onclick="switchTab('signup')">Sign Up</button><button id="tabLogin" onclick="switchTab('login')">Login</button></div>
-    <div id="signupForm"><label>Username</label><input id="suName" placeholder="e.g. chioma_"><label>Password</label><input id="suPass" type="password" placeholder="Create password"><button class="btn btn-green" style="width:100%;margin-top:10px" onclick="doSignup()">Create Account & Get ₦10,000</button></div>
-    <div id="loginForm" style="display:none"><label>Username</label><input id="liName" placeholder="Your username"><label>Password</label><input id="liPass" type="password" placeholder="Your password"><button class="btn btn-green" style="width:100%;margin-top:10px" onclick="doLogin()">Login</button></div>
-    <p id="authMsg" style="text-align:center;color:#ff5d70;margin-top:10px;min-height:18px"></p><span class="link" onclick="closeAuth()">Close</span>
-  </div>
+<div class="bet-panel" id="panel1">
+<div class="toggles"><label>Auto Bet <span class="switch" id="swBet1" onclick="toggleAutoBet(1)"></span></label><label>Auto Cashout <span class="switch on" id="swCash1" onclick="toggleAutoCash(1)"></span></label></div>
+<div class="betrow"><div class="stake-box"><button type="button" data-act="minus" data-i="1">−</button><input id="stake1" type="number" value="500"><button type="button" data-act="plus" data-i="1">+</button></div><button class="bet-btn" id="betBtn1"><span id="betBtnTxt1">BET</span><br><small>NGN <span id="betLabel1">500.00</span></small></button></div>
+<div class="quick"><button onclick="setStake(1,50,this)">50</button><button onclick="setStake(1,100,this)">100</button><button onclick="setStake(1,500,this)" class="active">500</button><button onclick="setStake(1,1000,this)">1000</button></div>
+<div class="auto-box"><div class="auto-row"><span>Auto Cash Out</span><span class="switch on" id="swAuto1" onclick="toggleAutoCash(1)"></span></div><input id="autoVal1" type="number" value="5.00"><div class="auto-hint">Tap to type your cashout</div><div class="auto-presets"><button onclick="setAuto(1,1.5)">1.50x</button><button onclick="setAuto(1,2)">2.00x</button><button onclick="setAuto(1,5)">5.00x</button></div><label class="auto-join"><input type="checkbox" id="joinChk1" onchange="toggleAutoBetChk(1,this)"> Auto Join Every Round</label></div>
 </div>
-
-<!-- WITHDRAW MODAL -->
-<div class="modal" id="withdrawModal">
-  <div class="modal-content">
-    <h2>💸 Withdraw</h2><p>Balance: <b style="color:#00e6a0">₦<span id="wdBalance">0</span></b> • Min ₦500</p>
-    <label>Amount to Withdraw (₦)</label><input id="wdAmount" type="number" placeholder="e.g. 5000" inputmode="decimal">
-    <div style="display:flex;gap:6px;margin:8px 0"><button class="btn btn-outline btn-small" style="flex:1" onclick="document.getElementById('wdAmount').value=1000">₦1,000</button><button class="btn btn-outline btn-small" style="flex:1" onclick="document.getElementById('wdAmount').value=5000">₦5,000</button><button class="btn btn-outline btn-small" style="flex:1" onclick="document.getElementById('wdAmount').value=10000">₦10,000</button></div>
-    <label>Bank</label><select id="wdBank"><option value="">Select Bank</option><option>Access Bank</option><option>GTBank</option><option>First Bank</option><option>UBA</option><option>OPay</option><option>Palmpay</option><option>Moniepoint</option><option>Kuda</option><option>Zenith Bank</option><option>Union Bank</option></select>
-    <label style="margin-top:10px">Account Number</label><input id="wdAcct" placeholder="10-digit account number" inputmode="numeric" maxlength="10">
-    <label style="margin-top:10px">Account Name</label><input id="wdName" placeholder="Name on account">
-    <button class="btn btn-withdraw" style="width:100%;margin-top:14px" onclick="doWithdraw()">CONFIRM WITHDRAW</button>
-    <p id="wdMsg" style="text-align:center;color:#ff5d70;margin-top:10px;min-height:18px"></p>
-    <span class="link" onclick="closeWithdraw()">Close</span>
-  </div>
+<div class="actions"><button class="round-btn" id="roundBtn">ROUND IN PROGRESS</button><button class="cash-btn" id="cashBtnAll" onclick="cashAll()">CASH OUT</button></div>
+<div class="msg">You are watching this round. Join the next one!</div>
 </div>
-
+<div class="history">
+<div class="history-top"><b>📊 LAST RESULTS</b><span>Last 10 games</span></div>
+<div class="history-last">Last Coefficient: <b id="lastCoeff">—</b></div>
+<div class="history-list" id="historyList"><span style="font-size:11px;color:#8a90b0">No games yet — play to see history</span></div>
+<div style="font-size:10px;color:#8a90b0;margin-top:8px">🔴 1.00 - 1.49 &nbsp; 🔵 1.50 - 10.00 &nbsp; 🟢 10.00+</div>
+</div>
+</div>
+<div class="players"><h3>👥 Live Bets <span>Total Staked <b style="color:#fff" id="totalStaked">₦24,800</b></span></h3><div class="feed"><div style="color:#ffd700;font-size:10px">💸 LIVE WITHDRAWALS</div><div id="feed">No withdrawals yet...</div></div><table><thead><tr><th>Player</th><th>Stake</th><th>Result</th></tr></thead><tbody id="betsList"></tbody></table></div>
+</div>
+<footer><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="footer-logo"><br><b style="color:#fff">STUDENT SUREPLUG</b><br>© 2026 Studentsureplug. All rights reserved.</footer>
+<div class="modal" id="authModal"><div class="box"><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="modal-logo"><h2>Welcome to Student Sureplug ✨</h2><p>Create account to get ₦10,000 free</p><div style="display:flex;gap:5px;margin-bottom:8px"><button id="tabS" style="background:#ffd700" onclick="switchTab('signup')">Sign Up</button><button id="tabL" style="background:#222;color:#fff" onclick="switchTab('login')">Login</button></div><div id="signupForm"><input id="suName" placeholder="Username"><input id="suPass" type="password" placeholder="Password"><button style="background:#ffd700" onclick="doSignup()">Create Account</button></div><div id="loginForm" style="display:none"><input id="liName" placeholder="Username"><input id="liPass" type="password" placeholder="Password"><button style="background:#ffd700" onclick="doLogin()">Login</button></div><p id="authMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('authModal')">Close</span></div></div>
+<div class="modal" id="depModal"><div class="box"><h2>💰 Deposit</h2><p>Balance: ₦<span id="dpBal">0</span> • Min ₦100</p><input id="dpAmt" type="number" placeholder="Amount"><input id="dpName" placeholder="Name"><input id="dpEmail" placeholder="Email"><button style="background:#00e6a0" onclick="doDeposit()">PAY WITH PAYSTACK</button><p id="dpMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('depModal')">Close</span></div></div>
+<div class="modal" id="wdModal"><div class="box"><h2>💸 Withdraw</h2><p>Balance: ₦<span id="wdBal">0</span> • Min ₦500</p><input id="wdAmt" type="number" placeholder="Amount"><select id="wdBank"><option value="">Select Bank</option><option>Access Bank</option><option>GTBank</option><option>First Bank</option><option>UBA</option><option>OPay</option><option>Palmpay</option><option>Moniepoint</option><option>Kuda</option><option>Zenith Bank</option></select><input id="wdAcct" maxlength="10" placeholder="Account Number"><input id="wdName" placeholder="Account Name"><button style="background:#ff2d55;color:#fff" onclick="doWithdraw()">CONFIRM WITHDRAW</button><p id="wdMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('wdModal')">Close</span></div></div>
 <script>
-let users = JSON.parse(localStorage.getItem('ssp_users')||'{}');
-let currentUser = localStorage.getItem('ssp_current')||null;
-let balance=0, stake=0, multiplier=1, crashPoint=0, playing=false, inRound=false, joinedThisRound=false, cashedOut=false, gameInterval=null, history=[];
-let totalWon=0, roundNum=1, countdownVal=7, countdownTimer=null;
-let autoCashOn=true, soundOn=true, audioCtx=null;
-let lastCrashValue=0;
-let liveBets=[]; let withdrawFeed=[];
-let myWithdrawals = JSON.parse(localStorage.getItem('ssp_withdrawals')||'[]');
-const fakeNames=['chiamaka_','tunde_','adaeze','emeka_','funmi','blessing_','ifeanyi','zainab_','chidi_','amara_','oluchi','kemi_','david_','sarah_','mike_','ngozi','chinedu','fatima','uche_','tolu'];
-const balanceEl=document.getElementById('balance'), multEl=document.getElementById('multiplier'),
-statusEl=document.getElementById('status'), msgEl=document.getElementById('message'),
-startBtn=document.getElementById('startBtn'), cashBtn=document.getElementById('cashBtn'),
-canvas=document.getElementById('chart'), ctx=canvas.getContext('2d'),
-countdownEl=document.getElementById('countdown');
-let points=[5];
-function toggleSound(){soundOn=!soundOn;let b=document.getElementById('soundBtn');if(soundOn){b.textContent='SOUND ON';b.className='sound-btn on';playSound('click');}else{b.textContent='SOUND OFF';b.className='sound-btn off';}}
-function playSound(type){ if(!soundOn) return; try{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); let osc=audioCtx.createOscillator(), gain=audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); let now=audioCtx.currentTime; if(type==='click'){osc.frequency.setValueAtTime(600,now);osc.type='sine';gain.gain.setValueAtTime(0.15,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.08);osc.start(now);osc.stop(now+0.08);} if(type==='win'){osc.type='sine';osc.frequency.setValueAtTime(523,now);osc.frequency.setValueAtTime(784,now+0.1);osc.frequency.setValueAtTime(1046,now+0.2);gain.gain.setValueAtTime(0.2,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.4);osc.start(now);osc.stop(now+0.4);} if(type==='crash'){osc.type='sawtooth';osc.frequency.setValueAtTime(300,now);osc.frequency.exponentialRampToValueAtTime(50,now+0.5);gain.gain.setValueAtTime(0.25,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.5);osc.start(now);osc.stop(now+0.5);} if(type==='start'){osc.type='sine';osc.frequency.setValueAtTime(440,now);osc.frequency.setValueAtTime(660,now+0.08);gain.gain.setValueAtTime(0.15,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.15);osc.start(now);osc.stop(now+0.15);} if(type==='tick'){osc.type='sine';osc.frequency.setValueAtTime(900,now);gain.gain.setValueAtTime(0.05,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.05);osc.start(now);osc.stop(now+0.05);} }catch(e){} }
-function generateCrashPoint(){ let r=Math.random(); let crash=0.97/(1-r); if(Math.random()<0.02) crash=1+Math.random()*0.1; if(Math.random()<0.05) crash=10+Math.random()*70; if(crash>100) crash=100; if(crash<1) crash=1; return crash; }
-function saveUsers(){localStorage.setItem('ssp_users',JSON.stringify(users));}
-function saveCurrent(){if(currentUser){users[currentUser].balance=balance;users[currentUser].won=totalWon;saveUsers();}}
-function updateUI(){ balanceEl.textContent=balance.toLocaleString('en-NG'); document.getElementById('leaderYou').textContent='₦'+totalWon.toLocaleString('en-NG'); const h=document.getElementById('headerAuth'); if(currentUser){h.innerHTML=`<div class="user-chip"><div class="avatar">${currentUser[0].toUpperCase()}</div><b>@${currentUser}</b></div><button class="btn btn-withdraw btn-small" onclick="openWithdraw()">Withdraw</button><button class="btn btn-outline btn-small" onclick="logout()">Logout</button>`;} else{h.innerHTML=`<button class="btn btn-outline btn-small" onclick="openAuth('login')">Login</button><button class="btn btn-green btn-small" onclick="openAuth('signup')">Sign Up</button>`;} }
+var PAYSTACK_KEY='YOUR_PAYSTACK_PUBLIC_KEY';
+var balance=10000, mult=1, crashAt=2, inRound=false, totalPlayers=1245, totalStaked=24800, planeProg=1, planeBob=0, tickCount=0;
+var soundOn=true, musicOn=true, audioCtx=null, jetOsc=null, jetGain=null, musicTimer=null, musicStep=0;
+var canvas=document.getElementById('chart'), ctx=canvas.getContext('2d');
+var line=[], flew=false, crashAnim=0, crashX=0, crashY=0, crashVX=0, crashVY=0, crashAngle=-0.35, waitingTimer=null, countdownTimer=null, fanAngle=0;
+var skyScroll=0, clouds=[], starsSky=[], dews=[], birds=[], bgPlanes=[];
+for(var i=0;i<14;i++) clouds.push({x:Math.random()*800, y:10+Math.random()*350, w:60+Math.random()*70, sp:0.5+Math.random()*0.6});
+for(var i=0;i<50;i++) starsSky.push({x:Math.random()*800, y:Math.random()*420, s:Math.random()*1.3+0.4, tw:Math.random()*6});
+for(var i=0;i<22;i++) dews.push({x:Math.random()*360, y:Math.random()*420, len:7+Math.random()*10, sp:1.8+Math.random()*2, s:1+Math.random()*1.2});
+for(var i=0;i<8;i++) birds.push({x:Math.random()*800, y:20+Math.random()*180, sp:0.7+Math.random()*0.8, size:0.5+Math.random()*0.5, flap:Math.random()*6});
+for(var i=0;i<3;i++) bgPlanes.push({x:Math.random()*800, y:30+Math.random()*200, sp:0.5+Math.random()*0.5, size:0.3+Math.random()*0.25});
+function wrap(v,m){var r=v%m;if(r<0)r+=m;return r;}
+var players=[], playerNames=['kemi','uche','david','zainab','oluchi','ifeanyi','chidi','tunde','tolu','emeka'];
+var myBets=[{stake:100,joined:false,playing:false,cashed:false,win:0,autoBet:false,autoCash:true},{stake:500,joined:false,playing:false,cashed:false,win:0,autoBet:false,autoCash:true}];
+var crashHistory=[]; try{ crashHistory=JSON.parse(localStorage.getItem('ssp_history')||'[]'); if(!Array.isArray(crashHistory)) crashHistory=[]; }catch(e){ crashHistory=[]; }
+// COEFFICIENT COLORS: Red 1.00-1.49 | Blue 1.50-10.00 | Green 10.00+
+function coeffClass(v){ if(v < 1.5) return 'c-red'; if(v <= 10) return 'c-blue'; return 'c-green'; }
+function renderHistory(){
+  var lastEl=document.getElementById('lastCoeff');
+  var listEl=document.getElementById('historyList');
+  if(!crashHistory.length){ if(lastEl){ lastEl.textContent='—'; lastEl.className=''; } if(listEl) listEl.innerHTML='<span style="font-size:11px;color:#8a90b0">No games yet — play to see history</span>'; return; }
+  if(lastEl){ lastEl.textContent=crashHistory[0].toFixed(2)+'x'; lastEl.className=coeffClass(crashHistory[0]); }
+  if(listEl) listEl.innerHTML=crashHistory.slice(0,10).map(function(v,i){
+    var cls=coeffClass(v)+(i===0?' latest':'');
+    return '<span class="hist-pill '+cls+'">'+v.toFixed(2)+'x</span>';
+  }).join('');
+}
+function addToHistory(v){
+  crashHistory.unshift(Math.round(v*100)/100);
+  if(crashHistory.length>20) crashHistory=crashHistory.slice(0,20);
+  try{ localStorage.setItem('ssp_history', JSON.stringify(crashHistory)); }catch(e){}
+  renderHistory();
+}
+function ensureAudio(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}catch(e){}}
+function tone(f,dur,vol,type){if(!soundOn)return;try{ensureAudio();var t=audioCtx.currentTime;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.12,t+0.03);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+dur+0.05);}catch(e){}}
+function timerBeep(n){
+  if(!soundOn) return;
+  try{
+    ensureAudio();
+    if(n>0){ tone(880,0.15,0.22,'square'); tone(880,0.15,0.22,'square'); }
+    else{ tone(880,0.15,0.22,'square'); setTimeout(function(){ tone(1318,0.35,0.25,'square'); },160); }
+  }catch(e){}
+}
+function playCrashSound(){
+  if(!soundOn) return;
+  try{
+    ensureAudio(); stopJet();
+    var t=audioCtx.currentTime;
+    var o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type='sawtooth'; o.frequency.setValueAtTime(900,t); o.frequency.exponentialRampToValueAtTime(80,t+0.9);
+    g.gain.setValueAtTime(0.18,t); g.gain.exponentialRampToValueAtTime(0.0001,t+1.0);
+    o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+1.05);
+    var o2=audioCtx.createOscillator(), g2=audioCtx.createGain();
+    o2.type='sine'; o2.frequency.setValueAtTime(1200,t); o2.frequency.exponentialRampToValueAtTime(100,t+0.8);
+    g2.gain.setValueAtTime(0.14,t); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.85);
+    o2.connect(g2); g2.connect(audioCtx.destination); o2.start(t); o2.stop(t+0.9);
+    setTimeout(function(){
+      if(!soundOn) return;
+      try{
+        var len=audioCtx.sampleRate*0.5; var buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate); var d=buf.getChannelData(0);
+        for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
+        var src=audioCtx.createBufferSource(); src.buffer=buf;
+        var fl=audioCtx.createBiquadFilter(); fl.type='lowpass'; fl.frequency.value=800;
+        var gg=audioCtx.createGain(); gg.gain.setValueAtTime(0.35,audioCtx.currentTime); gg.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.5);
+        src.connect(fl); fl.connect(gg); gg.connect(audioCtx.destination); src.start();
+        var o3=audioCtx.createOscillator(), g3=audioCtx.createGain();
+        o3.type='sine'; o3.frequency.setValueAtTime(120,audioCtx.currentTime); o3.frequency.exponentialRampToValueAtTime(30,audioCtx.currentTime+0.4);
+        g3.gain.setValueAtTime(0.3,audioCtx.currentTime); g3.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.45);
+        o3.connect(g3); g3.connect(audioCtx.destination); o3.start(); o3.stop(audioCtx.currentTime+0.5);
+      }catch(e){}
+    },850);
+  }catch(e){}
+}
+function toggleSound(){
+  soundOn=!soundOn;
+  var b=document.getElementById('soundBtn');
+  b.textContent=soundOn?'SOUND ON':'SOUND OFF';
+  b.className=soundOn?'s-on':'s-off';
+  if(!soundOn){ stopJet(); }
+  else{ tone(880,0.15,0.15); if(inRound) startJet(); }
+}
+function mNote(f,d,v,vol,type){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type||'triangle';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.12,t+0.04);g.gain.exponentialRampToValueAtTime(0.0001,t+v);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+v+0.05);}catch(e){}}
+function mKick(d,vol){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+0.14);g.gain.setValueAtTime(vol||0.28,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.18);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+0.2);}catch(e){}}
+function mLogDrum(f,d,vol){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*0.5,t+0.22);g.gain.setValueAtTime(vol||0.25,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.28);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+0.3);}catch(e){}}
+function mShaker(d){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var len=0.06;var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*len,audioCtx.sampleRate);var dd=buf.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*(1-i/dd.length);var s=audioCtx.createBufferSource();s.buffer=buf;var fl=audioCtx.createBiquadFilter();fl.type='highpass';fl.frequency.value=6000;var g=audioCtx.createGain();g.gain.setValueAtTime(0.06,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.06);s.connect(fl);fl.connect(g);g.connect(audioCtx.destination);s.start(t);}catch(e){}}
+function mClap(d){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var len=0.12;var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*len,audioCtx.sampleRate);var dd=buf.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/dd.length,1.5);var s=audioCtx.createBufferSource();s.buffer=buf;var fl=audioCtx.createBiquadFilter();fl.type='bandpass';fl.frequency.value=1800;var g=audioCtx.createGain();g.gain.setValueAtTime(0.12,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.12);s.connect(fl);fl.connect(g);g.connect(audioCtx.destination);s.start(t);}catch(e){}}
+function playMusic(){
+  if(!musicOn) return;
+  try{
+    var s=musicStep%32; var beat=s%8;
+    var inten=1; if(inRound&&mult>2)inten=1.5; if(inRound&&mult>5)inten=1.9;
+    if(beat===0||beat===2||beat===4||beat===6) mKick(0,0.28*inten);
+    if(beat%2===1) mShaker(0);
+    if(beat===2||beat===6) mClap(0);
+    var logFreq=[110,0,0,98,0,110,0,87, 0,0,98,0,110,0,0,98, 110,0,0,98,0,131,0,87, 0,0,110,0,98,0,110,0][s];
+    if(logFreq) mLogDrum(logFreq,0,0.24*inten);
+    var danceMelody=[523.25,0,659.25,783.99,0,659.25,587.33,523.25, 587.33,0,659.25,880,0,783.99,659.25,587.33, 523.25,0,659.25,783.99,0,880,1046.5,880, 783.99,659.25,587.33,523.25,0,587.33,659.25,0];
+    if(danceMelody[s]) mNote(danceMelody[s],0,0.22,0.13*inten,'square');
+    if(s%8===0){ var chords=[[261.63,329.63,392.0],[220,261.63,329.63],[196,246.94,293.66],[174.61,220,261.63]]; var ch=chords[Math.floor(s/8)%4]; ch.forEach(function(f){mNote(f,0,1.1,0.05*inten,'sine');}); }
+    if(s%4===2) mNote([1046.5,1318.5,1174.66,1567.98][Math.floor(s/4)%4],0,0.12,0.07*inten,'triangle');
+    musicStep++;
+  }catch(e){}
+}
+function startBg(){if(!musicOn||musicTimer)return;try{ensureAudio();musicTimer=setInterval(playMusic,140);}catch(e){}}
+function stopBg(){if(musicTimer){clearInterval(musicTimer);musicTimer=null;}}
+function toggleMusic(){musicOn=!musicOn;var b=document.getElementById('musicBtn');b.textContent=musicOn?'MUSIC ON':'MUSIC OFF';b.className=musicOn?'m-on':'m-off';if(musicOn)startBg();else stopBg();}
+function startJet(){if(!soundOn||jetOsc)return;try{ensureAudio();var t=audioCtx.currentTime;jetGain=audioCtx.createGain();jetGain.gain.setValueAtTime(0.0001,t);jetGain.gain.exponentialRampToValueAtTime(0.06,t+0.4);jetGain.connect(audioCtx.destination);jetOsc=audioCtx.createOscillator();jetOsc.type='sine';jetOsc.frequency.value=180;jetOsc.connect(jetGain);jetOsc.start(t);}catch(e){}}
+function updateJet(m){if(!jetOsc||!soundOn)return;try{var f=180+m*20;if(f>500)f=500;jetOsc.frequency.setTargetAtTime(f,audioCtx.currentTime,0.3);}catch(e){}}
+function stopJet(){try{if(jetOsc){jetOsc.stop();jetOsc=null;}if(jetGain){jetGain.disconnect();jetGain=null;}}catch(e){}}
+document.addEventListener('click',function(){ensureAudio();if(musicOn)startBg();});
+function toggleAutoBet(i){var el=document.getElementById('swBet'+i);el.classList.toggle('on');myBets[i].autoBet=el.classList.contains('on');document.getElementById('joinChk'+i).checked=myBets[i].autoBet;if(myBets[i].autoBet&&!inRound&&!myBets[i].joined)doAutoBet(i);}
+function toggleAutoBetChk(i,chk){myBets[i].autoBet=chk.checked;document.getElementById('swBet'+i).classList.toggle('on',chk.checked);if(chk.checked&&!inRound&&!myBets[i].joined)doAutoBet(i);}
+function toggleAutoCash(i){var el1=document.getElementById('swCash'+i),el2=document.getElementById('swAuto'+i);var isOn=el1.classList.contains('on');if(isOn){el1.classList.remove('on');el2.classList.remove('on');}else{el1.classList.add('on');el2.classList.add('on');}myBets[i].autoCash=!isOn;}
+function setAuto(i,v){document.getElementById('autoVal'+i).value=v.toFixed(2);}
+function doAutoBet(i){if(!localStorage.getItem('ssp_user'))return;if(inRound||myBets[i].joined)return;var s=Number(document.getElementById('stake'+i).value);if(!s||s<20||s>balance)return;myBets[i].stake=s;myBets[i].joined=true;setBetBtn(i,'wait','JOINED ✓','WAITING');document.getElementById('panel'+i).classList.add('on');}
+document.addEventListener('click',function(e){var btn=e.target.closest('[data-act]');if(!btn)return;var i=Number(btn.getAttribute('data-i'));changeStake(i,btn.getAttribute('data-act')==='plus'?100:-100);});
+function changeStake(i,d){var mb=myBets[i];if(mb.playing||mb.joined)return;var el=document.getElementById('stake'+i);var v=Number(el.value||0)+d;if(v<20)v=20;if(v>150000)v=150000;el.value=v;mb.stake=v;document.getElementById('betLabel'+i).textContent=v.toFixed(2);}
+function setStake(i,a,btn){if(inRound)return;var mb=myBets[i];if(mb.playing||mb.joined)return;document.getElementById('stake'+i).value=a;mb.stake=a;document.getElementById('betLabel'+i).textContent=a.toFixed(2);var bs=document.getElementById('panel'+i).querySelectorAll('.quick button');for(var k=0;k<bs.length;k++)bs[k].classList.remove('active');if(btn)btn.classList.add('active');}
+function setBetBtn(i,cls,txt,sub){document.getElementById('betBtn'+i).className='bet-btn '+cls;document.getElementById('betBtnTxt'+i).textContent=txt;document.getElementById('betLabel'+i).textContent=sub;}
+function onBetBtn(i){ensureAudio();if(musicOn)startBg();if(myBets[i].playing)cashOut(i);else joinNext(i);}
+document.getElementById('betBtn0').onclick=function(){onBetBtn(0);};document.getElementById('betBtn1').onclick=function(){onBetBtn(1);};
+function joinNext(i){if(!localStorage.getItem('ssp_user'))return openAuth('signup');if(inRound)return;if(myBets[i].joined)return;var s=Number(document.getElementById('stake'+i).value);myBets[i].stake=s;if(!s||s<20||s>balance)return;myBets[i].joined=true;setBetBtn(i,'wait','JOINED ✓','WAITING');document.getElementById('panel'+i).classList.add('on');tone(880,0.15,0.15);}
+function cashOut(i){var b=myBets[i];if(!b.playing||b.cashed||!inRound)return;var win=Math.floor(b.stake*mult);balance+=win;updateUI();b.cashed=true;b.playing=false;b.win=win;setBetBtn(i,'','CASHED ₦'+win.toLocaleString(),'@ '+mult.toFixed(2)+'x');document.getElementById('feed').innerHTML='💸 YOU withdrew <b style="color:#00e6a0">₦'+win.toLocaleString()+'</b> @ '+mult.toFixed(2)+'x';document.getElementById('toast').textContent='💸 Withdrew ₦'+win.toLocaleString()+' @ '+mult.toFixed(2)+'x';document.getElementById('toast').style.display='block';setTimeout(function(){document.getElementById('toast').style.display='none';},2500);tone(880,0.2,0.15);tone(1318,0.3,0.15);players.forEach(function(pp){if(pp.isYou&&pp.betIdx===i){pp.status='CASHED';pp.win=win;}});renderPlayers();}
+function cashAll(){myBets.forEach(function(mb,idx){if(mb.playing&&!mb.cashed)cashOut(idx);});}
+function genPlayers(){players=[];var stakes=[300,100,300,1500,200,100,10000,500,800,500];for(var i=0;i<10;i++){players.push({name:'@'+playerNames[i%playerNames.length],stake:stakes[i],cashAt:1.2+Math.random()*3.5,status:'PLAYING',win:0,isYou:false,betIdx:-1});}myBets.forEach(function(mb,idx){if(mb.joined)players.unshift({name:'YOU • Bet '+(idx+1),stake:mb.stake,cashAt:999,status:mb.cashed?'CASHED':'PLAYING',win:mb.win||0,isYou:true,betIdx:idx});});renderPlayers();}
+function renderPlayers(){var el=document.getElementById('betsList');document.getElementById('totalStaked').textContent='₦'+totalStaked.toLocaleString();if(!players.length){el.innerHTML='<tr><td colspan="3" style="text-align:center">Players are joining...</td></tr>';return;}el.innerHTML=players.map(function(p){var res=p.status==='PLAYING'?'<span class="playing">● PLAYING</span>':p.status==='CASHED'?'<span class="win">WITHDREW ₦'+p.win.toLocaleString()+'</span>':'<span class="lose">DID NOT CASH OUT</span>';return '<tr><td>'+(p.isYou?'⭐ ':'')+p.name+'</td><td>₦'+p.stake.toLocaleString()+'</td><td>'+res+'</td></tr>';}).join('');}
+function drawSmallPlane(x,y,s){
+  ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.globalAlpha=0.7;
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(-30,0);ctx.quadraticCurveTo(-10,-12,30,-4);ctx.quadraticCurveTo(36,0,30,4);ctx.quadraticCurveTo(-10,10,-30,0);ctx.fill();
+  ctx.fillStyle='#00e6a0';ctx.beginPath();ctx.moveTo(-18,-2);ctx.lineTo(-26,-14);ctx.lineTo(-8,-4);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(28,0,3,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+function drawBird(x,y,s,flap){
+  ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.lineCap='round';
+  var w=Math.sin(flap)*6;
+  ctx.beginPath();ctx.moveTo(-10,0);ctx.quadraticCurveTo(-5,-6-w,-0,0);ctx.quadraticCurveTo(5,-6-w,10,0);ctx.stroke();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,1,2,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+function drawPlane(x,y,ang){
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.scale(1.10,1.10);
+  ctx.fillStyle='#00c853';ctx.beginPath();ctx.moveTo(-58,-4);ctx.lineTo(-72,-28);ctx.lineTo(-48,-8);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#00c853';ctx.beginPath();ctx.moveTo(-18,6);ctx.lineTo(-32,30);ctx.lineTo(-2,10);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#ffffff';ctx.beginPath();ctx.moveTo(-62,0);ctx.quadraticCurveTo(-62,-14,-20,-16);ctx.quadraticCurveTo(40,-16,62,-4);ctx.quadraticCurveTo(68,0,62,4);ctx.quadraticCurveTo(20,12,-20,10);ctx.quadraticCurveTo(-62,8,-62,0);ctx.fill();
+  ctx.fillStyle='#00c853';ctx.beginPath();ctx.moveTo(-58,2);ctx.quadraticCurveTo(-20,12,20,10);ctx.quadraticCurveTo(52,8,62,2);ctx.quadraticCurveTo(20,7,-20,7);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#1e293b';ctx.beginPath();ctx.ellipse(28,-8,16,6,-0.15,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#aefcff';ctx.beginPath();ctx.ellipse(28,-9,10,3,-0.15,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#00c853';ctx.font='900 10px Arial';ctx.textAlign='center';ctx.fillText('STUDENT',-8,-4);
+  ctx.fillStyle='#111111';ctx.font='900 10px Arial';ctx.fillText('SUREPLUG',-8,5);
+  ctx.fillStyle='#ffd700';ctx.font='800 6px Arial';ctx.fillText('✈ PLAY SMART',-8,12);
+  ctx.fillStyle='#334155';ctx.beginPath();ctx.arc(-18,12,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(8,12,5,0,Math.PI*2);ctx.fill();
+  ctx.save();ctx.translate(66,0);ctx.rotate(fanAngle);for(var b=0;b<3;b++){ctx.rotate(Math.PI*2/3);ctx.fillStyle='#00c853';ctx.beginPath();ctx.ellipse(0,-14,4.5,13,0,0,Math.PI*2);ctx.fill();}ctx.restore();ctx.restore();
+}
+function draw(){
+  var W=canvas.width,H=canvas.height;
+  var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0a1a3a');g.addColorStop(0.5,'#123a5e');g.addColorStop(1,'#0d1326');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  for(var i=0;i<starsSky.length;i++){var st=starsSky[i];var sx=wrap(st.x-skyScroll*0.6,800);var sy=wrap(st.y-skyScroll*0.2,420);if(sx>W||sy>H)continue;ctx.save();ctx.globalAlpha=0.6;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx,sy,st.s,0,Math.PI*2);ctx.fill();ctx.restore();}
+  for(var i=0;i<clouds.length;i++){var c=clouds[i];var cx=wrap(c.x-skyScroll*c.sp,800);if(cx>W+80)continue;ctx.fillStyle='rgba(255,255,255,0.08)';ctx.beginPath();ctx.ellipse(cx,c.y,c.w*0.5,10,0,0,Math.PI*2);ctx.fill();}
+  for(var i=0;i<bgPlanes.length;i++){var bp=bgPlanes[i];bp.x+=bp.sp+(inRound?0.6:0); if(bp.x>400){bp.x=-60; bp.y=30+Math.random()*200;} drawSmallPlane(bp.x,bp.y,bp.size);}
+  for(var i=0;i<birds.length;i++){var bd=birds[i];bd.x+=bd.sp+(inRound?0.5:0); bd.flap+=0.22; if(bd.x>400){bd.x=-30; bd.y=20+Math.random()*180;} drawBird(bd.x,bd.y,bd.size,bd.flap);}
+  if(line.length>1){
+    var driftX = inRound ? 0.35 : 0.08;
+    for(var li=0;li<line.length;li++){ line[li].x-=driftX*0.4; line[li].y+=driftX*0.15; }
+    ctx.save();ctx.lineCap='round';ctx.strokeStyle='#00e6a0';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(line[0].x,line[0].y);for(var i=1;i<line.length;i++)ctx.lineTo(line[i].x,line[i].y);ctx.stroke();ctx.restore();
+  }
+  for(var i=0;i<dews.length;i++){var d=dews[i];d.y+=d.sp;if(inRound)d.y+=1.2;if(d.y>H+10){d.y=-10;d.x=Math.random()*W;}ctx.save();ctx.strokeStyle='rgba(174,252,255,0.5)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-2,d.y+d.len);ctx.stroke();ctx.restore();}
+  if(inRound&&line.length>0){
+    var p=line[line.length-1];
+    var bobY = Math.sin(planeBob)*12;
+    var bobAngle = -0.35 + Math.cos(planeBob)*0.18;
+    drawPlane(p.x, p.y + bobY, bobAngle);
+  }
+  if(flew){
+    crashAnim++;
+    crashX+=crashVX; crashY+=crashVY; crashVY+=0.35; crashAngle+=0.03;
+    if(crashX>-100&&crashX<500&&crashY<420){
+      drawPlane(crashX,crashY,crashAngle);
+      ctx.fillStyle='rgba(255,255,255,0.25)';ctx.beginPath();ctx.arc(crashX-30,crashY+10,6+crashAnim*0.2,0,Math.PI*2);ctx.fill();
+    }
+    if(crashAnim>10&&crashAnim<25){ctx.font='28px Arial';ctx.textAlign='center';ctx.fillText('💥',crashX+20,crashY+20);}
+    if(crashAnim>22){ctx.font='bold 22px Arial';ctx.textAlign='center';ctx.fillStyle='#ff2d55';ctx.fillText('FLEW AWAY!',180,200);}
+  }
+}
+function animate(){fanAngle+=0.18; planeBob+=0.08; if(inRound)skyScroll+=1.2;else if(flew)skyScroll+=2.0;else skyScroll+=0.3;draw();requestAnimationFrame(animate);}
+function genCrash(){var r=Math.random();if(r<0.6)return 1.2+Math.random()*1.8;if(r<0.9)return 3+Math.random()*7;return 10+Math.random()*18;}
+function updateUI(){
+  var bt=document.getElementById('balTop');if(bt)bt.textContent=balance.toLocaleString();
+  var db=document.getElementById('dpBal');if(db)db.textContent=balance.toLocaleString();
+  var wb=document.getElementById('wdBal');if(wb)wb.textContent=balance.toLocaleString();
+  var ht=document.getElementById('headerTop');
+  if(localStorage.getItem('ssp_user')&&ht){ht.innerHTML='<span class="bal-pill">Balance: <b>₦'+balance.toLocaleString()+'</b></span><button class="head-btn dep" onclick="openDeposit()">Deposit</button><button class="head-btn wd" onclick="openWithdraw()">Withdraw</button><button class="head-btn out" onclick="logout()">Logout</button>';}
+  if(!localStorage.getItem('ssp_user')&&ht){ht.innerHTML='<span class="bal-pill">Balance: <b>₦'+balance.toLocaleString()+'</b></span><button class="head-btn dep" onclick="openAuth(\'signup\')">Sign Up</button><button class="head-btn wd" onclick="openAuth(\'login\')">Login</button>';}
+}
 function openAuth(m){document.getElementById('authModal').style.display='flex';switchTab(m);}
-function closeAuth(){document.getElementById('authModal').style.display='none';}
-function switchTab(m){document.getElementById('tabSignup').classList.toggle('active',m==='signup');document.getElementById('tabLogin').classList.toggle('active',m==='login');document.getElementById('signupForm').style.display=m==='signup'?'block':'none';document.getElementById('loginForm').style.display=m==='login'?'block':'none';}
-function doSignup(){let u=document.getElementById('suName').value.trim().toLowerCase(),p=document.getElementById('suPass').value;if(u.length<3)return showAuth('Username must be at least 3 letters');if(p.length<4)return showAuth('Password must be at least 4 characters');if(users[u])return showAuth('Username already exists, please login');users[u]={pass:p,balance:10000,won:0};saveUsers();currentUser=u;localStorage.setItem('ssp_current',u);balance=10000;totalWon=0;closeAuth();updateUI();msgEl.textContent='Welcome @'+u+'! You got ₦10,000 free virtual money.';playSound('win');}
-function doLogin(){let u=document.getElementById('liName').value.trim().toLowerCase(),p=document.getElementById('liPass').value;if(!users[u]||users[u].pass!==p)return showAuth('Wrong username or password');currentUser=u;localStorage.setItem('ssp_current',u);balance=users[u].balance||0;totalWon=users[u].won||0;closeAuth();updateUI();msgEl.textContent='Welcome back @'+u+'!';playSound('win');}
-function showAuth(t){document.getElementById('authMsg').textContent=t;}
-function logout(){currentUser=null;localStorage.removeItem('ssp_current');balance=0;totalWon=0;joinedThisRound=false;playing=false;updateUI();msgEl.textContent='Logged out. Login to continue playing.';}
-// WITHDRAW
-function openWithdraw(){ if(!currentUser) return openAuth('signup'); document.getElementById('wdBalance').textContent=balance.toLocaleString('en-NG'); document.getElementById('wdMsg').textContent=''; document.getElementById('withdrawModal').style.display='flex'; }
-function closeWithdraw(){ document.getElementById('withdrawModal').style.display='none'; }
-function renderMyWithdrawals(){ let el=document.getElementById('myWithdrawals'); let mine=myWithdrawals.filter(w=>w.user===currentUser); if(!currentUser || mine.length===0){ el.innerHTML='<span style="color:#8aa0b8;font-size:12px">No withdrawals yet</span>'; return; } el.innerHTML=mine.slice().reverse().map(w=>`<div class="wd-row"><span>₦${w.amount.toLocaleString('en-NG')} • ${w.bank} • ${w.acct}</span><b style="color:#ffb938">${w.status}</b></div>`).join(''); }
-function doWithdraw(){ let amt=Number(document.getElementById('wdAmount').value); let bank=document.getElementById('wdBank').value; let acct=document.getElementById('wdAcct').value.trim(); let name=document.getElementById('wdName').value.trim(); let msg=document.getElementById('wdMsg'); if(!Number.isFinite(amt)||amt<500) return msg.textContent='Minimum withdraw is ₦500'; if(amt>balance) return msg.textContent='Insufficient balance'; if(!bank) return msg.textContent='Select your bank'; if(acct.length!==10) return msg.textContent='Account number must be 10 digits'; if(name.length<3) return msg.textContent='Enter account name'; balance-=amt; updateUI(); saveCurrent(); myWithdrawals.push({user:currentUser,amount:amt,bank,acct,name,status:'PENDING',time:Date.now()}); localStorage.setItem('ssp_withdrawals',JSON.stringify(myWithdrawals)); renderMyWithdrawals(); msg.style.color='#00e6a0'; msg.textContent='Withdraw request sent! You will receive ₦'+amt.toLocaleString('en-NG')+' in 5-15 mins.'; playSound('win'); setTimeout(()=>{ closeWithdraw(); msgEl.textContent='Withdraw of ₦'+amt.toLocaleString('en-NG')+' requested. Check My Withdrawals below.'; },1500); }
-function setStake(a,btn){if(inRound)return;document.getElementById('stake').value=a;document.querySelectorAll('.quick button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');playSound('click');}
-function toggleAutoCash(){autoCashOn=!autoCashOn;let b=document.getElementById('autoToggle');let w=document.getElementById('autoInputWrap');if(autoCashOn){b.textContent='ON';b.className='auto-toggle on';w.classList.remove('hide');}else{b.textContent='OFF';b.className='auto-toggle off';w.classList.add('hide');}playSound('click');}
-function keypadQuick(v){document.getElementById('autoCashValue').value=v;playSound('click');}
-function getAuto(){let v=parseFloat(document.getElementById('autoCashValue').value);if(!Number.isFinite(v)||v<1.1)return 0;return v;}
-function fixCanvas(){canvas.width=canvas.offsetWidth;canvas.height=220;drawChart();}
-function drawChart(){ const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h); ctx.strokeStyle='#1e354d';ctx.lineWidth=1; for(let i=1;i<5;i++){let y=(h/5)*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();} if(points.length<2)return; ctx.beginPath();ctx.strokeStyle='#00e6a0';ctx.lineWidth=3; points.forEach((pt,i)=>{let x=(i/100)*w;let y=h-pt;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}); ctx.stroke(); }
-function resetChart(){points=[5];drawChart();}
-function updateCashButton(){ if(playing && !cashedOut && inRound){ let win=Math.floor(stake*multiplier); cashBtn.textContent='CASH OUT ₦'+win.toLocaleString('en-NG'); } }
-function randomStake(){ let opts=[100,200,300,500,500,800,1000,1500,2000,3000,5000,10000]; return opts[Math.floor(Math.random()*opts.length)]; }
-function generateLiveBets(){ liveBets=[]; withdrawFeed=[]; document.getElementById('withdrawFeed').innerHTML='<span style="color:#8aa0b8">No withdrawals yet this round...</span>'; let count=8+Math.floor(Math.random()*10); let used=new Set(); for(let i=0;i<count;i++){ let name; do{ name=fakeNames[Math.floor(Math.random()*fakeNames.length)]; }while(used.has(name)); used.add(name); let s=randomStake(); let auto=1.2+Math.random()*4; if(Math.random()<0.25) auto=999; liveBets.push({name, stake:s, auto: auto, status:'playing', win:0, cashAt:0, isMe:false}); } if(joinedThisRound && currentUser){ let s=Number(document.getElementById('stake').value); liveBets.unshift({name: currentUser, stake:s, auto: getAuto()||999, status:'playing', win:0, cashAt:0, isMe:true}); } renderLiveBets(); }
-function renderLiveBets(){ let total=liveBets.reduce((a,b)=>a+b.stake,0); document.getElementById('totalStaked').textContent='₦'+total.toLocaleString('en-NG'); document.getElementById('betsCount').textContent=liveBets.length; if(liveBets.length===0){document.getElementById('betsList').innerHTML='<div style="text-align:center;color:#8aa0b8;font-size:12px;padding:12px">Waiting for players to join...</div>';return;} let sorted=[...liveBets].sort((a,b)=> (b.isMe?1:0)-(a.isMe?1:0)); document.getElementById('betsList').innerHTML=sorted.map(p=>{ let right=''; if(p.status==='playing'){ right=`<b>₦${p.stake.toLocaleString('en-NG')}</b><div class="bet-status status-playing">● PLAYING • Staked ₦${p.stake.toLocaleString('en-NG')}</div>`; } else if(p.status==='cashed'){ right=`<b style="color:#00e6a0">₦${p.win.toLocaleString('en-NG')}</b><div class="bet-status status-cashed">WITHDREW @ ${p.cashAt.toFixed(2)}x</div>`; } else { right=`<b style="color:#ff5d70">-₦${p.stake.toLocaleString('en-NG')}</b><div class="bet-status status-lost">LOST • No Withdraw</div>`; } return `<div class="bet-row ${p.isMe?'me':''}"><div class="bet-left"><div class="bet-avatar">${p.name[0].toUpperCase()}</div><div class="bet-name">@${p.name}${p.isMe?' (You)':''}<small>Staked ₦${p.stake.toLocaleString('en-NG')} ${p.status==='playing'?'• Waiting to withdraw':p.status==='cashed'?'• Withdrew':''}</small></div></div><div class="bet-right">${right}</div></div>`; }).join(''); }
-function addWithdrawFeed(name, stake, win, at, isMe){ withdrawFeed.unshift({name, stake, win, at, isMe}); withdrawFeed=withdrawFeed.slice(0,4); document.getElementById('withdrawFeed').innerHTML=withdrawFeed.map(f=>`<div class="feed-item">💸 <b>@${f.name}${f.isMe?' (You)':''}</b> staked ₦${f.stake.toLocaleString('en-NG')} → withdrew <b>₦${f.win.toLocaleString('en-NG')}</b> @ ${f.at.toFixed(2)}x</div>`).join(''); let toast=document.getElementById('withdrawToast'); toast.innerHTML=`💸 @${name} withdrew <b>₦${win.toLocaleString('en-NG')}</b> @ ${at.toFixed(2)}x`; toast.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>{toast.style.display='none';},2500); }
-function updateLiveBetsOnTick(){ let changed=false; liveBets.forEach(p=>{ if(p.isMe) return; if(p.status==='playing' && multiplier>=p.auto && p.auto!==999){ p.status='cashed'; p.cashAt=multiplier; p.win=Math.floor(p.stake*multiplier); changed=true; addWithdrawFeed(p.name, p.stake, p.win, multiplier, false); } }); if(changed) renderLiveBets(); }
-function updateLiveBetsOnCrash(){ liveBets.forEach(p=>{ if(p.status==='playing'){ p.status='lost'; } }); renderLiveBets(); }
-function updateMyBetOnCashOut(win, at){ let me=liveBets.find(p=>p.isMe); if(me){ me.status='cashed'; me.cashAt=at; me.win=win; renderLiveBets(); } }
-function joinNextRound(){ if(!currentUser)return openAuth('signup'); if(inRound)return msgEl.textContent='Round already started. Wait for next round.'; if(joinedThisRound)return msgEl.textContent='You are already in the next round.'; let s=Number(document.getElementById('stake').value); if(!Number.isFinite(s)||s<10)return msgEl.textContent='Enter at least ₦10 stake.'; if(s>balance)return msgEl.textContent='Insufficient balance.'; joinedThisRound=true;startBtn.textContent='JOINED ✓ - WAITING FOR ROUND';startBtn.disabled=true; msgEl.textContent=`You joined with ₦${s.toLocaleString('en-NG')}. Good luck!`;playSound('click'); }
-function startWaiting(){ inRound=false;joinedThisRound=false;playing=false;cashedOut=false; multEl.textContent='Waiting...';multEl.className='multiplier waiting'; statusEl.textContent='PLACE YOUR STAKE - NEXT ROUND STARTING';statusEl.style.color='#ffb938'; countdownVal=4+Math.floor(Math.random()*6);countdownEl.textContent='Next round in '+countdownVal+'s'; startBtn.disabled=false;startBtn.textContent='JOIN NEXT ROUND';cashBtn.disabled=true;cashBtn.textContent='CASH OUT';resetChart(); liveBets=[]; withdrawFeed=[]; document.getElementById('totalStaked').textContent='₦0'; document.getElementById('betsCount').textContent='0'; document.getElementById('withdrawFeed').innerHTML='<span style="color:#8aa0b8">No withdrawals yet this round...</span>'; document.getElementById('betsList').innerHTML='<div style="text-align:center;color:#8aa0b8;font-size:12px;padding:12px">Players are joining... Place your stake!</div>'; if(document.getElementById('autoJoin').checked && currentUser && balance>=10){setTimeout(()=>{if(!inRound && !joinedThisRound){joinNextRound();}},800);} clearInterval(countdownTimer); countdownTimer=setInterval(()=>{countdownVal--;if(countdownVal>0){countdownEl.textContent='Next round in '+countdownVal+'s';if(countdownVal<=3)playSound('tick');}else{clearInterval(countdownTimer);startRound();}},1000); }
-function startRound(){ inRound=true;playSound('start'); if(document.getElementById('autoJoin').checked && !joinedThisRound && currentUser && balance>=10){joinNextRound();} if(joinedThisRound && currentUser){ stake=Number(document.getElementById('stake').value); if(stake>balance){joinedThisRound=false;playing=false;} else{balance-=stake;playing=true;updateUI();saveCurrent();} } else {playing=false;stake=0;} multiplier=1;crashPoint=generateCrashPoint(); generateLiveBets(); statusEl.textContent='ROUND IS RUNNING';statusEl.style.color='#00e6a0'; countdownEl.textContent='Round in progress...';multEl.className='multiplier'; startBtn.disabled=true;startBtn.textContent='ROUND IN PROGRESS';cashBtn.disabled=!playing; if(playing){cashBtn.textContent='CASH OUT ₦'+stake.toLocaleString('en-NG');msgEl.textContent='You are in this round. Watch and cash out!';} else {cashBtn.textContent='CASH OUT';msgEl.textContent='You are watching this round. Join the next one!';} clearInterval(gameInterval); function tick(){ if(!inRound) return; let roll=Math.random(); let growth=0; if(roll<0.30) growth=0.001+Math.random()*0.002; else if(roll<0.75) growth=0.003+Math.random()*0.004; else if(roll<0.95) growth=0.006+Math.random()*0.005; else growth=0.010+Math.random()*0.006; multiplier+=growth+multiplier*growth*0.25; multEl.textContent=multiplier.toFixed(2)+'x'; points.push(Math.min(200,5+multiplier*18));if(points.length>100)points.shift();drawChart(); updateCashButton(); updateLiveBetsOnTick(); if(playing && !cashedOut && autoCashOn){ let auto=getAuto(); if(auto>0 && multiplier>=auto){ cashOut(); } } if(multiplier>=crashPoint){endRound();return;} gameInterval=setTimeout(tick,220+Math.random()*130); } tick(); }
-function cashOut(){ if(!playing||cashedOut||!inRound)return; let win=Math.floor(stake*multiplier);balance+=win;totalWon+=win;updateUI();saveCurrent(); cashedOut=true;playing=false;cashBtn.disabled=true; cashBtn.textContent='CASHED ₦'+win.toLocaleString('en-NG'); statusEl.textContent='CASHED OUT AT '+multiplier.toFixed(2)+'x • ROUND STILL RUNNING';statusEl.style.color='#00e6a0'; msgEl.textContent=`You received ₦${win.toLocaleString('en-NG')}! Line keeps moving until crash...`; updateMyBetOnCashOut(win, multiplier); addWithdrawFeed(currentUser, stake, win, multiplier, true); playSound('win'); }
-function endRound(){ clearTimeout(gameInterval);clearInterval(gameInterval); inRound=false; multEl.textContent=crashPoint.toFixed(2)+'x';multEl.classList.add('crashed'); statusEl.textContent='CRASHED AT '+crashPoint.toFixed(2)+'x';statusEl.style.color='#ff5d70'; countdownEl.textContent='Next round in 4s...'; updateLiveBetsOnCrash(); lastCrashValue=crashPoint; addHistory(crashPoint,false); updateLastCrash(); if(playing && !cashedOut){msgEl.textContent='Round over. Your stake was lost. Next round coming...';cashBtn.textContent='CASH OUT';} else if(cashedOut){msgEl.textContent=`Round ended at ${crashPoint.toFixed(2)}x. You already cashed out. Check Coefficients below.`;} else if(!joinedThisRound){msgEl.textContent=`Round ended at ${crashPoint.toFixed(2)}x. Next round coming...`;} playSound('crash'); if(playing && !cashedOut)saveCurrent(); playing=false;cashBtn.disabled=true;roundNum++;updateUI(); setTimeout(()=>{startWaiting();},3000+Math.random()*2000); }
-function updateLastCrash(){ let el=document.getElementById('lastCrash'); let color=getHistoryColor(lastCrashValue); el.innerHTML=`Last round: <b class="${color}">${lastCrashValue.toFixed(2)}x</b>`; }
-function getHistoryColor(v){ if(v>=10) return 'green'; if(v<=1.05) return 'red'; return 'blue'; }
-function renderHistory(){ if(history.length===0){document.getElementById('history').innerHTML='<span class="history-item">No coefficients yet</span>';return;} document.getElementById('history').innerHTML=history.map(h=>{ let v=parseFloat(h.value); let color=getHistoryColor(v); return `<span class="history-item ${color}">${h.value}x</span>`; }).join(''); }
-function addHistory(v,won){ history.unshift({value:v.toFixed(2),won});history=history.slice(0,12); renderHistory(); }
-if(currentUser && users[currentUser]){balance=users[currentUser].balance||10000;totalWon=users[currentUser].won||0;}
-setInterval(()=>{document.getElementById('livePlayers').textContent=(1200+Math.floor(Math.random()*80)).toLocaleString();},3000);
-window.addEventListener('resize',fixCanvas);
-fixCanvas();updateUI();renderMyWithdrawals();startWaiting();
-if(!currentUser){msgEl.textContent='Please Sign Up or Login to play. You get ₦10,000 free. Game runs forever.';}
+function switchTab(m){document.getElementById('signupForm').style.display=m==='signup'?'block':'none';document.getElementById('loginForm').style.display=m==='login'?'block':'none';document.getElementById('tabS').style.background=m==='signup'?'#ffd700':'#222';document.getElementById('tabS').style.color=m==='signup'?'#000':'#fff';document.getElementById('tabL').style.background=m==='login'?'#ffd700':'#222';document.getElementById('tabL').style.color=m==='login'?'#000':'#fff';}
+function closeModal(id){document.getElementById(id).style.display='none';}
+function openDeposit(){if(!localStorage.getItem('ssp_user'))return openAuth('signup');document.getElementById('depModal').style.display='flex';updateUI();}
+function openWithdraw(){if(!localStorage.getItem('ssp_user'))return openAuth('signup');document.getElementById('wdModal').style.display='flex';updateUI();}
+function doSignup(){var u=document.getElementById('suName').value.trim();var p=document.getElementById('suPass').value;if(u.length<3||p.length<4){document.getElementById('authMsg').textContent='Username 3+, Password 4+';return;}localStorage.setItem('ssp_user',u);localStorage.setItem('ssp_pass_'+u,p);balance=10000;updateUI();closeModal('authModal');}
+function doLogin(){var u=document.getElementById('liName').value.trim();var p=document.getElementById('liPass').value;if(localStorage.getItem('ssp_pass_'+u)!==p){document.getElementById('authMsg').textContent='Wrong username or password';return;}localStorage.setItem('ssp_user',u);balance=10000;updateUI();closeModal('authModal');}
+function logout(){localStorage.removeItem('ssp_user');balance=0;location.reload();}
+function clearTimers(){if(waitingTimer){clearTimeout(waitingTimer);waitingTimer=null;}if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}if(tickTimer){clearTimeout(tickTimer);tickTimer=null;}}
+function startWaiting(){clearTimers();inRound=false;flew=false;crashAnim=0;line=[];mult=1;planeProg=1;tickCount=0;myBets.forEach(function(mb,idx){mb.joined=false;mb.playing=false;mb.cashed=false;mb.win=0;setBetBtn(idx,'','BET',Number(document.getElementById('stake'+idx).value).toFixed(2));document.getElementById('panel'+idx).classList.remove('on');});document.getElementById('mult').textContent='1.00x';document.getElementById('mult').className='mult';document.getElementById('status').textContent='NEXT ROUND';document.getElementById('flewLabel').textContent='Waiting for next round...';document.getElementById('roundBtn').textContent='NEXT ROUND';renderPlayers();myBets.forEach(function(mb,idx){if(mb.autoBet)setTimeout(function(){doAutoBet(idx);},400);});var cd=4;document.getElementById('msg').innerHTML='NEXT ROUND IN <b>'+cd+'s</b> • PLACE YOUR 2 BETS!';timerBeep(cd);countdownTimer=setInterval(function(){cd--;if(cd>0){document.getElementById('msg').innerHTML='NEXT ROUND IN <b>'+cd+'s</b> • PLACE YOUR 2 BETS!';timerBeep(cd);}else{clearInterval(countdownTimer);countdownTimer=null;timerBeep(0);startRound();}},1000);}
+var tickTimer=null;
+function startRound(){clearTimers();inRound=true;if(soundOn)startJet();if(musicOn)startBg();myBets.forEach(function(mb){if(mb.joined){if(mb.stake<=balance){balance-=mb.stake;mb.playing=true;}else{mb.joined=false;mb.playing=false;}}else mb.playing=false;});updateUI();mult=1;planeProg=1;tickCount=0;crashAt=genCrash();line=[{x:10,y:380}];flew=false;document.getElementById('status').textContent='ROUND IS RUNNING';document.getElementById('flewLabel').textContent='Round in progress...';document.getElementById('roundBtn').textContent='ROUND IN PROGRESS';genPlayers();function tick(){if(!inRound)return;
+  tickCount++;
+  var planeStep = (tickCount % 2 === 1) ? 0.02 : 0.04;
+  planeProg = Math.round((planeProg + planeStep)*100)/100;
+  if(tickCount % 3 === 0){
+    mult = Math.round((mult + 0.02)*100)/100;
+    var el=document.getElementById('mult');el.textContent=mult.toFixed(2)+'x';el.className='mult';updateJet(mult);
+  }
+  myBets.forEach(function(mb,idx){if(mb.playing&&!mb.cashed){setBetBtn(idx,'cash','CASH OUT ₦'+Math.floor(mb.stake*mult).toLocaleString(),'Bet '+(idx+1));var a=Number(document.getElementById('autoVal'+idx).value);if(mb.autoCash&&a>=1.1&&mult>=a)cashOut(idx);}});players.forEach(function(pp){if(!pp.isYou&&pp.status==='PLAYING'&&mult>=pp.cashAt){pp.status='CASHED';pp.win=Math.floor(pp.stake*pp.cashAt);}});var p=1-1/planeProg;if(p<0)p=0;var tx=10+Math.pow(p,0.55)*300;var ty=380-Math.pow(p,1.3)*340;if(tx>340)tx=340;if(ty<12)ty=12;line.push({x:tx,y:ty});if(line.length>500)line.shift();renderPlayers();if(mult>=crashAt){crashX=tx;crashY=ty;endRound();return;}tickTimer=setTimeout(tick,130);}tickTimer=setTimeout(tick,130);}
+function endRound(){clearTimers();inRound=false;flew=true;crashAnim=0;crashVX=7;crashVY=-6;crashAngle=-0.35;playCrashSound();addToHistory(mult);document.getElementById('status').textContent='FLEW AWAY!';document.getElementById('flewLabel').textContent='FLEW AWAY!';var el=document.getElementById('mult');el.textContent=mult.toFixed(2)+'x';el.className='mult red';players.forEach(function(pp){if(pp.status==='PLAYING')pp.status='LOST';});myBets.forEach(function(mb){if(mb.playing&&!mb.cashed)mb.playing=false;});renderPlayers();setTimeout(function(){startWaiting();},3200);}
+function doDeposit(){var amt=Number(document.getElementById('dpAmt').value);var name=document.getElementById('dpName').value.trim();var email=document.getElementById('dpEmail').value.trim();var msg=document.getElementById('dpMsg');if(!amt||amt<100||name.length<3||!email||email.indexOf('@')<0){msg.textContent='Fill all fields, Min ₦100';return;}if(!PAYSTACK_KEY||PAYSTACK_KEY==='YOUR_PAYSTACK_PUBLIC_KEY'){msg.textContent='⚠️ Add your Paystack Public Key!';return;}var h=PaystackPop.setup({key:PAYSTACK_KEY,email:email,amount:amt*100,currency:'NGN',ref:''+Math.floor(Math.random()*1000000000),callback:function(res){balance+=amt;updateUI();msg.style.color='#00e6a0';msg.textContent='Success! ₦'+amt.toLocaleString()+' added!';setTimeout(function(){closeModal('depModal');},1000);},onClose:function(){msg.textContent='Paystack closed.';}});h.openIframe();}
+function doWithdraw(){var amt=Number(document.getElementById('wdAmt').value);var bank=document.getElementById('wdBank').value;var acct=document.getElementById('wdAcct').value.trim();var name=document.getElementById('wdName').value.trim();var msg=document.getElementById('wdMsg');if(!amt||amt<500||amt>balance||!bank||acct.length!==10||name.length<3){msg.textContent='Check amount / bank / account';return;}balance-=amt;updateUI();msg.style.color='#00e6a0';msg.textContent='Withdraw sent! ₦'+amt.toLocaleString();setTimeout(function(){closeModal('wdModal');},1200);}
+document.getElementById('stake0').addEventListener('input',function(){myBets[0].stake=Number(this.value||0);document.getElementById('betLabel0').textContent=Number(this.value||0).toFixed(2);});
+document.getElementById('stake1').addEventListener('input',function(){myBets[1].stake=Number(this.value||0);document.getElementById('betLabel1').textContent=Number(this.value||0).toFixed(2);});
+updateUI();animate();genPlayers();renderHistory();startWaiting();
 </script>
 </body>
 </html>
