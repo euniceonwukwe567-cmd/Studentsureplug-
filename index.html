@@ -35,14 +35,28 @@ canvas{display:block;width:100%;height:420px;background:#0a0f1e;border-radius:10
 footer{text-align:center;padding:14px;color:#8a90b0;font-size:10px}.footer-logo{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #00e6a0;margin-bottom:6px}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99;justify-content:center;align-items:center;padding:10px}.box{background:#1a0033;width:100%;max-width:340px;padding:14px;border-radius:12px;border:2px solid #ffd700;max-height:92vh;overflow-y:auto}.box h2{text-align:center;font-size:14px;margin-bottom:6px}.box p{text-align:center;font-size:11px;margin-bottom:8px}.box input,.box select{width:100%;padding:10px;background:#070816;color:#fff;border:1px solid #444;border-radius:8px;margin:4px 0 8px}.box button{width:100%;padding:12px;border:none;border-radius:8px;font-weight:800;cursor:pointer}.link{color:#ffd700;text-align:center;display:block;margin-top:8px;cursor:pointer;font-size:11px}.modal-logo{width:120px;height:auto;border-radius:10px;display:block;margin:0 auto 6px}
 .toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#0a2a20;border:2px solid #ffd700;color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;z-index:200;display:none;max-width:92vw;text-align:center}
+.chatbox{margin:12px 0;background:#12162e;border-radius:12px;padding:12px;border:1px solid #00e6a0}
+.chatbox h3{font-size:13px;display:flex;justify-content:space-between}
+.chatbox h3 span{font-size:11px;color:#00e6a0}
+#chatMsgs{height:200px;overflow-y:auto;background:#0a0f1e;border:1px solid #222;border-radius:8px;padding:8px;margin:8px 0;font-size:12px}
+.chat-msg{margin-bottom:7px;line-height:1.4;word-wrap:break-word}
+.chat-msg b{color:#ffd700}
+.chat-msg.sys{color:#00e6a0;background:#0a2a20;padding:5px 7px;border-radius:6px;border-left:3px solid #00e6a0}
+.chat-row{display:flex;gap:6px}
+.chat-row input{flex:1;padding:11px;background:#070816;color:#fff;border:1px solid #333;border-radius:8px;outline:none}
+.chat-row button{background:#00e6a0;border:none;padding:11px 14px;border-radius:8px;font-weight:800;cursor:pointer}
+#chatLocked{text-align:center;font-size:12px;color:#ff5d70;padding:12px;background:#0a0f1e;border-radius:8px}
+#cashoutPill{position:fixed;top:62px;left:50%;transform:translateX(-50%);z-index:300;background:#1a1e35;border:1px solid #333;border-radius:20px;padding:7px 12px;font-size:11px;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;display:none;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+#cashoutPill b{color:#fff}
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
+<div id="cashoutPill"></div>
 <header>
 <div class="header-top">
 <div class="logo-wrap"><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="logo-img"><div class="logo-text"><b>STUDENT <span>SUREPLUG</span></b><small>PLAY SMART</small></div></div>
-<div class="header-right" id="headerTop"><span class="bal-pill">Balance: <b>₦<span id="balTop">10,000</span></b></span><button class="head-btn dep" onclick="openDeposit()">Deposit</button><button class="head-btn wd" onclick="openWithdraw()">Withdraw</button><button class="head-btn out" onclick="logout()">Logout</button></div>
+<div class="header-right" id="headerTop"><span class="bal-pill">Balance: <b>₦<span id="balTop">1,000</span></b></span><button class="head-btn dep" onclick="openDeposit()">Deposit</button><button class="head-btn wd" onclick="openWithdraw()">Withdraw</button><button class="head-btn out" onclick="logout()">Logout</button></div>
 </div>
 </header>
 <div class="wrap">
@@ -77,18 +91,29 @@ footer{text-align:center;padding:14px;color:#8a90b0;font-size:10px}.footer-logo{
 <div style="font-size:10px;color:#8a90b0;margin-top:8px">🔴 1.00 - 1.49 &nbsp; 🔵 1.50 - 10.00 &nbsp; 🟢 10.00+</div>
 </div>
 </div>
-<div class="players"><h3>👥 Live Bets <span>Total Staked <b style="color:#fff" id="totalStaked">₦24,800</b></span></h3><div class="feed"><div style="color:#ffd700;font-size:10px">💸 LIVE WITHDRAWALS</div><div id="feed">No withdrawals yet...</div></div><table><thead><tr><th>Player</th><th>Stake</th><th>Result</th></tr></thead><tbody id="betsList"></tbody></table></div>
+<div class="players"><h3>👥 Live Bets <span>Total Staked <b style="color:#fff" id="totalStaked">₦24,800</b></span></h3>
+<div class="feed"><div style="color:#ffd700;font-size:10px">💸 LIVE WITHDRAWALS</div><div id="feed">No withdrawals yet...</div></div><table><thead><tr><th>Player</th><th>Stake</th><th>Result</th></tr></thead><tbody id="betsList"></tbody></table></div>
+<div class="chatbox">
+  <h3>💬 Live Chat <span id="chatCount">● LIVE</span></h3>
+  <div id="chatLocked">🔒 Please Login to chat. Only logged-in players can send messages.</div>
+  <div id="chatMsgs" style="display:none"></div>
+  <div class="chat-row" id="chatRow" style="display:none">
+    <input id="chatInput" placeholder="Type message...">
+    <button onclick="sendChat()">Send</button>
+  </div>
+</div>
 </div>
 <footer><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="footer-logo"><br><b style="color:#fff">STUDENT SUREPLUG</b><br>© 2026 Studentsureplug. All rights reserved.</footer>
-<div class="modal" id="authModal"><div class="box"><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="modal-logo"><h2>Welcome to Student Sureplug ✨</h2><p>Create account to get ₦10,000 free</p><div style="display:flex;gap:5px;margin-bottom:8px"><button id="tabS" style="background:#ffd700" onclick="switchTab('signup')">Sign Up</button><button id="tabL" style="background:#222;color:#fff" onclick="switchTab('login')">Login</button></div><div id="signupForm"><input id="suName" placeholder="Username"><input id="suPass" type="password" placeholder="Password"><button style="background:#ffd700" onclick="doSignup()">Create Account</button></div><div id="loginForm" style="display:none"><input id="liName" placeholder="Username"><input id="liPass" type="password" placeholder="Password"><button style="background:#ffd700" onclick="doLogin()">Login</button></div><p id="authMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('authModal')">Close</span></div></div>
+<div class="modal" id="authModal"><div class="box"><img src="https://i.postimg.cc/Z5WYYdkD/99b1678e-7e94-4c16-b49f-b79714398e21.jpg" class="modal-logo"><h2>Welcome to Student Sureplug ✨</h2><p>Create account to get ₦1,000 free</p><div style="display:flex;gap:5px;margin-bottom:8px"><button id="tabS" style="background:#ffd700" onclick="switchTab('signup')">Sign Up</button><button id="tabL" style="background:#222;color:#fff" onclick="switchTab('login')">Login</button></div><div id="signupForm"><input id="suName" placeholder="Username"><input id="suPass" type="password" placeholder="Password"><button style="background:#ffd700" onclick="doSignup()">Create Account</button></div><div id="loginForm" style="display:none"><input id="liName" placeholder="Username"><input id="liPass" type="password" placeholder="Password"><button style="background:#ffd700" onclick="doLogin()">Login</button></div><p id="authMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('authModal')">Close</span></div></div>
 <div class="modal" id="depModal"><div class="box"><h2>💰 Deposit</h2><p>Balance: ₦<span id="dpBal">0</span> • Min ₦100</p><input id="dpAmt" type="number" placeholder="Amount"><input id="dpName" placeholder="Name"><input id="dpEmail" placeholder="Email"><button style="background:#00e6a0" onclick="doDeposit()">PAY WITH PAYSTACK</button><p id="dpMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('depModal')">Close</span></div></div>
 <div class="modal" id="wdModal"><div class="box"><h2>💸 Withdraw</h2><p>Balance: ₦<span id="wdBal">0</span> • Min ₦500</p><input id="wdAmt" type="number" placeholder="Amount"><select id="wdBank"><option value="">Select Bank</option><option>Access Bank</option><option>GTBank</option><option>First Bank</option><option>UBA</option><option>OPay</option><option>Palmpay</option><option>Moniepoint</option><option>Kuda</option><option>Zenith Bank</option></select><input id="wdAcct" maxlength="10" placeholder="Account Number"><input id="wdName" placeholder="Account Name"><button style="background:#ff2d55;color:#fff" onclick="doWithdraw()">CONFIRM WITHDRAW</button><p id="wdMsg" style="color:#ff5d70"></p><span class="link" onclick="closeModal('wdModal')">Close</span></div></div>
 <script>
 var PAYSTACK_KEY='YOUR_PAYSTACK_PUBLIC_KEY';
-var balance=10000, mult=1, crashAt=2, inRound=false, totalPlayers=1245, totalStaked=24800, planeProg=1, planeBob=0, tickCount=0;
+var balance=1000, mult=1, crashAt=2, inRound=false, totalPlayers=1245, totalStaked=24800, planeProg=1, planeBob=0, tickCount=0;
 var soundOn=true, musicOn=true, audioCtx=null, jetOsc=null, jetGain=null, musicTimer=null, musicStep=0;
 var canvas=document.getElementById('chart'), ctx=canvas.getContext('2d');
 var line=[], flew=false, crashAnim=0, crashX=0, crashY=0, crashVX=0, crashVY=0, crashAngle=-0.35, waitingTimer=null, countdownTimer=null, fanAngle=0;
+var explosionParts=[], exploded=false, flashVal=0;
 var skyScroll=0, clouds=[], starsSky=[], dews=[], birds=[], bgPlanes=[];
 for(var i=0;i<14;i++) clouds.push({x:Math.random()*800, y:10+Math.random()*350, w:60+Math.random()*70, sp:0.5+Math.random()*0.6});
 for(var i=0;i<50;i++) starsSky.push({x:Math.random()*800, y:Math.random()*420, s:Math.random()*1.3+0.4, tw:Math.random()*6});
@@ -99,7 +124,6 @@ function wrap(v,m){var r=v%m;if(r<0)r+=m;return r;}
 var players=[], playerNames=['kemi','uche','david','zainab','oluchi','ifeanyi','chidi','tunde','tolu','emeka'];
 var myBets=[{stake:100,joined:false,playing:false,cashed:false,win:0,autoBet:false,autoCash:true},{stake:500,joined:false,playing:false,cashed:false,win:0,autoBet:false,autoCash:true}];
 var crashHistory=[]; try{ crashHistory=JSON.parse(localStorage.getItem('ssp_history')||'[]'); if(!Array.isArray(crashHistory)) crashHistory=[]; }catch(e){ crashHistory=[]; }
-// COEFFICIENT COLORS: Red 1.00-1.49 | Blue 1.50-10.00 | Green 10.00+
 function coeffClass(v){ if(v < 1.5) return 'c-red'; if(v <= 10) return 'c-blue'; return 'c-green'; }
 function renderHistory(){
   var lastEl=document.getElementById('lastCoeff');
@@ -116,6 +140,18 @@ function addToHistory(v){
   if(crashHistory.length>20) crashHistory=crashHistory.slice(0,20);
   try{ localStorage.setItem('ssp_history', JSON.stringify(crashHistory)); }catch(e){}
   renderHistory();
+}
+var pillTimer=null;
+function showCashoutNotif(name, amount, atMult){
+  var pill=document.getElementById('cashoutPill');
+  if(!pill) return;
+  pill.innerHTML='✈️ @'+name+' withdrew ₦'+amount.toLocaleString()+' @ '+atMult.toFixed(2)+'x';
+  pill.style.display='block';
+  if(pillTimer) clearTimeout(pillTimer);
+  pillTimer=setTimeout(function(){ pill.style.display='none'; }, 3000);
+  var feed=document.getElementById('feed');
+  if(feed) feed.innerHTML='💸 <b>@'+name+'</b> withdrew <b style="color:#00e6a0">₦'+amount.toLocaleString()+'</b> @ '+atMult.toFixed(2)+'x';
+  if(window._pushCashoutToFirebase) window._pushCashoutToFirebase(name, amount, atMult);
 }
 function ensureAudio(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}catch(e){}}
 function tone(f,dur,vol,type){if(!soundOn)return;try{ensureAudio();var t=audioCtx.currentTime;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.12,t+0.03);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+dur+0.05);}catch(e){}}
@@ -137,24 +173,9 @@ function playCrashSound(){
     g.gain.setValueAtTime(0.18,t); g.gain.exponentialRampToValueAtTime(0.0001,t+1.0);
     o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+1.05);
     var o2=audioCtx.createOscillator(), g2=audioCtx.createGain();
-    o2.type='sine'; o2.frequency.setValueAtTime(1200,t); o2.frequency.exponentialRampToValueAtTime(100,t+0.8);
-    g2.gain.setValueAtTime(0.14,t); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.85);
-    o2.connect(g2); g2.connect(audioCtx.destination); o2.start(t); o2.stop(t+0.9);
-    setTimeout(function(){
-      if(!soundOn) return;
-      try{
-        var len=audioCtx.sampleRate*0.5; var buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate); var d=buf.getChannelData(0);
-        for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
-        var src=audioCtx.createBufferSource(); src.buffer=buf;
-        var fl=audioCtx.createBiquadFilter(); fl.type='lowpass'; fl.frequency.value=800;
-        var gg=audioCtx.createGain(); gg.gain.setValueAtTime(0.35,audioCtx.currentTime); gg.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.5);
-        src.connect(fl); fl.connect(gg); gg.connect(audioCtx.destination); src.start();
-        var o3=audioCtx.createOscillator(), g3=audioCtx.createGain();
-        o3.type='sine'; o3.frequency.setValueAtTime(120,audioCtx.currentTime); o3.frequency.exponentialRampToValueAtTime(30,audioCtx.currentTime+0.4);
-        g3.gain.setValueAtTime(0.3,audioCtx.currentTime); g3.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.45);
-        o3.connect(g3); g3.connect(audioCtx.destination); o3.start(); o3.stop(audioCtx.currentTime+0.5);
-      }catch(e){}
-    },850);
+    o2.type='sine'; o2.frequency.setValueAtTime(120,t+0.05); o2.frequency.exponentialRampToValueAtTime(30,t+0.8);
+    g2.gain.setValueAtTime(0.35,t+0.05); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.9);
+    o2.connect(g2); g2.connect(audioCtx.destination); o2.start(t+0.05); o2.stop(t+0.95);
   }catch(e){}
 }
 function toggleSound(){
@@ -165,33 +186,56 @@ function toggleSound(){
   if(!soundOn){ stopJet(); }
   else{ tone(880,0.15,0.15); if(inRound) startJet(); }
 }
-function mNote(f,d,v,vol,type){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type||'triangle';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.12,t+0.04);g.gain.exponentialRampToValueAtTime(0.0001,t+v);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+v+0.05);}catch(e){}}
-function mKick(d,vol){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+0.14);g.gain.setValueAtTime(vol||0.28,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.18);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+0.2);}catch(e){}}
-function mLogDrum(f,d,vol){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*0.5,t+0.22);g.gain.setValueAtTime(vol||0.25,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.28);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+0.3);}catch(e){}}
-function mShaker(d){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var len=0.06;var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*len,audioCtx.sampleRate);var dd=buf.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*(1-i/dd.length);var s=audioCtx.createBufferSource();s.buffer=buf;var fl=audioCtx.createBiquadFilter();fl.type='highpass';fl.frequency.value=6000;var g=audioCtx.createGain();g.gain.setValueAtTime(0.06,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.06);s.connect(fl);fl.connect(g);g.connect(audioCtx.destination);s.start(t);}catch(e){}}
-function mClap(d){if(!musicOn)return;try{ensureAudio();var t=audioCtx.currentTime+d;var len=0.12;var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*len,audioCtx.sampleRate);var dd=buf.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/dd.length,1.5);var s=audioCtx.createBufferSource();s.buffer=buf;var fl=audioCtx.createBiquadFilter();fl.type='bandpass';fl.frequency.value=1800;var g=audioCtx.createGain();g.gain.setValueAtTime(0.12,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.12);s.connect(fl);fl.connect(g);g.connect(audioCtx.destination);s.start(t);}catch(e){}}
+function mNote(f,d,v,vol,type){
+  if(!musicOn) return;
+  try{
+    ensureAudio();
+    var t=audioCtx.currentTime+d;
+    var o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type=type||'sine';
+    o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol||0.10,t+0.08);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+v);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t+v+0.05);
+  }catch(e){}
+}
 function playMusic(){
   if(!musicOn) return;
   try{
-    var s=musicStep%32; var beat=s%8;
-    var inten=1; if(inRound&&mult>2)inten=1.5; if(inRound&&mult>5)inten=1.9;
-    if(beat===0||beat===2||beat===4||beat===6) mKick(0,0.28*inten);
-    if(beat%2===1) mShaker(0);
-    if(beat===2||beat===6) mClap(0);
-    var logFreq=[110,0,0,98,0,110,0,87, 0,0,98,0,110,0,0,98, 110,0,0,98,0,131,0,87, 0,0,110,0,98,0,110,0][s];
-    if(logFreq) mLogDrum(logFreq,0,0.24*inten);
-    var danceMelody=[523.25,0,659.25,783.99,0,659.25,587.33,523.25, 587.33,0,659.25,880,0,783.99,659.25,587.33, 523.25,0,659.25,783.99,0,880,1046.5,880, 783.99,659.25,587.33,523.25,0,587.33,659.25,0];
-    if(danceMelody[s]) mNote(danceMelody[s],0,0.22,0.13*inten,'square');
-    if(s%8===0){ var chords=[[261.63,329.63,392.0],[220,261.63,329.63],[196,246.94,293.66],[174.61,220,261.63]]; var ch=chords[Math.floor(s/8)%4]; ch.forEach(function(f){mNote(f,0,1.1,0.05*inten,'sine');}); }
-    if(s%4===2) mNote([1046.5,1318.5,1174.66,1567.98][Math.floor(s/4)%4],0,0.12,0.07*inten,'triangle');
+    var s=musicStep%16;
+    var calmMelody=[523.25,0,587.33,0,659.25,0,783.99,0, 659.25,0,587.33,0,523.25,0,440,0];
+    if(calmMelody[s]) mNote(calmMelody[s],0,1.2,0.09,'sine');
+    if(s%8===0){
+      var bass=[130.81,110,98,110][Math.floor(s/8)%4];
+      mNote(bass,0,1.8,0.07,'sine');
+    }
+    if(s%8===0){
+      var chords=[[261.63,329.63,392.0],[220,261.63,329.63]];
+      var ch=chords[Math.floor(s/8)%2];
+      ch.forEach(function(f){ mNote(f,0,2.5,0.035,'sine'); });
+    }
+    if(s%4===2) mNote(8000,0,0.05,0.015,'sine');
     musicStep++;
   }catch(e){}
 }
-function startBg(){if(!musicOn||musicTimer)return;try{ensureAudio();musicTimer=setInterval(playMusic,140);}catch(e){}}
-function stopBg(){if(musicTimer){clearInterval(musicTimer);musicTimer=null;}}
-function toggleMusic(){musicOn=!musicOn;var b=document.getElementById('musicBtn');b.textContent=musicOn?'MUSIC ON':'MUSIC OFF';b.className=musicOn?'m-on':'m-off';if(musicOn)startBg();else stopBg();}
-function startJet(){if(!soundOn||jetOsc)return;try{ensureAudio();var t=audioCtx.currentTime;jetGain=audioCtx.createGain();jetGain.gain.setValueAtTime(0.0001,t);jetGain.gain.exponentialRampToValueAtTime(0.06,t+0.4);jetGain.connect(audioCtx.destination);jetOsc=audioCtx.createOscillator();jetOsc.type='sine';jetOsc.frequency.value=180;jetOsc.connect(jetGain);jetOsc.start(t);}catch(e){}}
-function updateJet(m){if(!jetOsc||!soundOn)return;try{var f=180+m*20;if(f>500)f=500;jetOsc.frequency.setTargetAtTime(f,audioCtx.currentTime,0.3);}catch(e){}}
+function startBg(){
+  if(!musicOn || musicTimer) return;
+  try{ ensureAudio(); musicTimer=setInterval(playMusic, 350); }catch(e){}
+}
+function stopBg(){
+  if(musicTimer){ clearInterval(musicTimer); musicTimer=null; }
+}
+function toggleMusic(){
+  musicOn=!musicOn;
+  var b=document.getElementById('musicBtn');
+  b.textContent=musicOn?'MUSIC ON':'MUSIC OFF';
+  b.className=musicOn?'m-on':'m-off';
+  if(musicOn) startBg(); else stopBg();
+}
+function startJet(){if(!soundOn||jetOsc)return;try{ensureAudio();var t=audioCtx.currentTime;jetGain=audioCtx.createGain();jetGain.gain.setValueAtTime(0.0001,t);jetGain.gain.exponentialRampToValueAtTime(0.04,t+0.4);jetGain.connect(audioCtx.destination);jetOsc=audioCtx.createOscillator();jetOsc.type='sine';jetOsc.frequency.value=160;jetOsc.connect(jetGain);jetOsc.start(t);}catch(e){}}
+function updateJet(m){if(!jetOsc||!soundOn)return;try{var f=160+m*12;if(f>320)f=320;jetOsc.frequency.setTargetAtTime(f,audioCtx.currentTime,0.3);}catch(e){}}
 function stopJet(){try{if(jetOsc){jetOsc.stop();jetOsc=null;}if(jetGain){jetGain.disconnect();jetGain=null;}}catch(e){}}
 document.addEventListener('click',function(){ensureAudio();if(musicOn)startBg();});
 function toggleAutoBet(i){var el=document.getElementById('swBet'+i);el.classList.toggle('on');myBets[i].autoBet=el.classList.contains('on');document.getElementById('joinChk'+i).checked=myBets[i].autoBet;if(myBets[i].autoBet&&!inRound&&!myBets[i].joined)doAutoBet(i);}
@@ -206,7 +250,10 @@ function setBetBtn(i,cls,txt,sub){document.getElementById('betBtn'+i).className=
 function onBetBtn(i){ensureAudio();if(musicOn)startBg();if(myBets[i].playing)cashOut(i);else joinNext(i);}
 document.getElementById('betBtn0').onclick=function(){onBetBtn(0);};document.getElementById('betBtn1').onclick=function(){onBetBtn(1);};
 function joinNext(i){if(!localStorage.getItem('ssp_user'))return openAuth('signup');if(inRound)return;if(myBets[i].joined)return;var s=Number(document.getElementById('stake'+i).value);myBets[i].stake=s;if(!s||s<20||s>balance)return;myBets[i].joined=true;setBetBtn(i,'wait','JOINED ✓','WAITING');document.getElementById('panel'+i).classList.add('on');tone(880,0.15,0.15);}
-function cashOut(i){var b=myBets[i];if(!b.playing||b.cashed||!inRound)return;var win=Math.floor(b.stake*mult);balance+=win;updateUI();b.cashed=true;b.playing=false;b.win=win;setBetBtn(i,'','CASHED ₦'+win.toLocaleString(),'@ '+mult.toFixed(2)+'x');document.getElementById('feed').innerHTML='💸 YOU withdrew <b style="color:#00e6a0">₦'+win.toLocaleString()+'</b> @ '+mult.toFixed(2)+'x';document.getElementById('toast').textContent='💸 Withdrew ₦'+win.toLocaleString()+' @ '+mult.toFixed(2)+'x';document.getElementById('toast').style.display='block';setTimeout(function(){document.getElementById('toast').style.display='none';},2500);tone(880,0.2,0.15);tone(1318,0.3,0.15);players.forEach(function(pp){if(pp.isYou&&pp.betIdx===i){pp.status='CASHED';pp.win=win;}});renderPlayers();}
+function cashOut(i){var b=myBets[i];if(!b.playing||b.cashed||!inRound)return;var win=Math.floor(b.stake*mult);balance+=win;updateUI();b.cashed=true;b.playing=false;b.win=win;setBetBtn(i,'','CASHED ₦'+win.toLocaleString(),'@ '+mult.toFixed(2)+'x');document.getElementById('feed').innerHTML='💸 YOU withdrew <b style="color:#00e6a0">₦'+win.toLocaleString()+'</b> @ '+mult.toFixed(2)+'x';document.getElementById('toast').textContent='💸 Withdrew ₦'+win.toLocaleString()+' @ '+mult.toFixed(2)+'x';document.getElementById('toast').style.display='block';setTimeout(function(){document.getElementById('toast').style.display='none';},2500);tone(880,0.2,0.15);tone(1318,0.3,0.15);players.forEach(function(pp){if(pp.isYou&&pp.betIdx===i){pp.status='CASHED';pp.win=win;}});renderPlayers();
+  var myName = localStorage.getItem('ssp_user') || 'YOU';
+  showCashoutNotif(myName, win, mult);
+}
 function cashAll(){myBets.forEach(function(mb,idx){if(mb.playing&&!mb.cashed)cashOut(idx);});}
 function genPlayers(){players=[];var stakes=[300,100,300,1500,200,100,10000,500,800,500];for(var i=0;i<10;i++){players.push({name:'@'+playerNames[i%playerNames.length],stake:stakes[i],cashAt:1.2+Math.random()*3.5,status:'PLAYING',win:0,isYou:false,betIdx:-1});}myBets.forEach(function(mb,idx){if(mb.joined)players.unshift({name:'YOU • Bet '+(idx+1),stake:mb.stake,cashAt:999,status:mb.cashed?'CASHED':'PLAYING',win:mb.win||0,isYou:true,betIdx:idx});});renderPlayers();}
 function renderPlayers(){var el=document.getElementById('betsList');document.getElementById('totalStaked').textContent='₦'+totalStaked.toLocaleString();if(!players.length){el.innerHTML='<tr><td colspan="3" style="text-align:center">Players are joining...</td></tr>';return;}el.innerHTML=players.map(function(p){var res=p.status==='PLAYING'?'<span class="playing">● PLAYING</span>':p.status==='CASHED'?'<span class="win">WITHDREW ₦'+p.win.toLocaleString()+'</span>':'<span class="lose">DID NOT CASH OUT</span>';return '<tr><td>'+(p.isYou?'⭐ ':'')+p.name+'</td><td>₦'+p.stake.toLocaleString()+'</td><td>'+res+'</td></tr>';}).join('');}
@@ -238,6 +285,15 @@ function drawPlane(x,y,ang){
   ctx.fillStyle='#334155';ctx.beginPath();ctx.arc(-18,12,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(8,12,5,0,Math.PI*2);ctx.fill();
   ctx.save();ctx.translate(66,0);ctx.rotate(fanAngle);for(var b=0;b<3;b++){ctx.rotate(Math.PI*2/3);ctx.fillStyle='#00c853';ctx.beginPath();ctx.ellipse(0,-14,4.5,13,0,0,Math.PI*2);ctx.fill();}ctx.restore();ctx.restore();
 }
+function createExplosion(x,y){
+  explosionParts=[];
+  var colors=['#ff2d55','#ff9500','#ffd700','#ff5d70','#ffffff','#ff6b00'];
+  for(var i=0;i<45;i++){
+    var ang=Math.random()*Math.PI*2;
+    var sp=2+Math.random()*7;
+    explosionParts.push({x:x,y:y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp-2,life:30+Math.random()*30,size:3+Math.random()*8,color:colors[Math.floor(Math.random()*colors.length)]});
+  }
+}
 function draw(){
   var W=canvas.width,H=canvas.height;
   var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0a1a3a');g.addColorStop(0.5,'#123a5e');g.addColorStop(1,'#0d1326');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
@@ -260,12 +316,38 @@ function draw(){
   if(flew){
     crashAnim++;
     crashX+=crashVX; crashY+=crashVY; crashVY+=0.35; crashAngle+=0.03;
-    if(crashX>-100&&crashX<500&&crashY<420){
-      drawPlane(crashX,crashY,crashAngle);
-      ctx.fillStyle='rgba(255,255,255,0.25)';ctx.beginPath();ctx.arc(crashX-30,crashY+10,6+crashAnim*0.2,0,Math.PI*2);ctx.fill();
+    if(crashAnim<18){
+      if(crashX>-100&&crashX<500&&crashY<420){
+        drawPlane(crashX,crashY,crashAngle);
+      }
     }
-    if(crashAnim>10&&crashAnim<25){ctx.font='28px Arial';ctx.textAlign='center';ctx.fillText('💥',crashX+20,crashY+20);}
-    if(crashAnim>22){ctx.font='bold 22px Arial';ctx.textAlign='center';ctx.fillStyle='#ff2d55';ctx.fillText('FLEW AWAY!',180,200);}
+    else {
+      if(!exploded){
+        exploded=true;
+        createExplosion(crashX+30, crashY+30);
+        flashVal=12;
+      }
+      var ex=crashX+30, ey=crashY+30;
+      if(flashVal>0){
+        ctx.save();ctx.globalAlpha=flashVal/12*0.6;ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(ex,ey,120,0,Math.PI*2);ctx.fill();ctx.restore();
+        flashVal--;
+      }
+      var expSize = 60 + (crashAnim-18)*2; if(expSize>110) expSize=110;
+      ctx.save();ctx.textAlign='center';ctx.font='bold '+expSize+'px Arial';ctx.fillText('💥', ex, ey+10);ctx.restore();
+      for(var pi=0;pi<explosionParts.length;pi++){
+        var pt=explosionParts[pi];
+        pt.x+=pt.vx; pt.y+=pt.vy; pt.vy+=0.15; pt.life--;
+        if(pt.life>0){
+          ctx.save();ctx.globalAlpha=Math.max(pt.life/50,0);ctx.fillStyle=pt.color;ctx.beginPath();ctx.arc(pt.x,pt.y,pt.size,0,Math.PI*2);ctx.fill();ctx.restore();
+        }
+      }
+      ctx.save();ctx.globalAlpha=0.3;ctx.fillStyle='#888';ctx.beginPath();ctx.arc(ex,ey-40,30+crashAnim,0,Math.PI*2);ctx.fill();ctx.restore();
+    }
+    if(crashAnim>22){
+      ctx.font='900 26px Arial';ctx.textAlign='center';
+      ctx.fillStyle='#fff';ctx.fillText('💥 BOOM! 💥',180,200);
+      ctx.font='900 18px Arial';ctx.fillStyle='#ff2d55';ctx.fillText('FLEW AWAY!',180,228);
+    }
   }
 }
 function animate(){fanAngle+=0.18; planeBob+=0.08; if(inRound)skyScroll+=1.2;else if(flew)skyScroll+=2.0;else skyScroll+=0.3;draw();requestAnimationFrame(animate);}
@@ -283,11 +365,11 @@ function switchTab(m){document.getElementById('signupForm').style.display=m==='s
 function closeModal(id){document.getElementById(id).style.display='none';}
 function openDeposit(){if(!localStorage.getItem('ssp_user'))return openAuth('signup');document.getElementById('depModal').style.display='flex';updateUI();}
 function openWithdraw(){if(!localStorage.getItem('ssp_user'))return openAuth('signup');document.getElementById('wdModal').style.display='flex';updateUI();}
-function doSignup(){var u=document.getElementById('suName').value.trim();var p=document.getElementById('suPass').value;if(u.length<3||p.length<4){document.getElementById('authMsg').textContent='Username 3+, Password 4+';return;}localStorage.setItem('ssp_user',u);localStorage.setItem('ssp_pass_'+u,p);balance=10000;updateUI();closeModal('authModal');}
-function doLogin(){var u=document.getElementById('liName').value.trim();var p=document.getElementById('liPass').value;if(localStorage.getItem('ssp_pass_'+u)!==p){document.getElementById('authMsg').textContent='Wrong username or password';return;}localStorage.setItem('ssp_user',u);balance=10000;updateUI();closeModal('authModal');}
+function doSignup(){var u=document.getElementById('suName').value.trim();var p=document.getElementById('suPass').value;if(u.length<3||p.length<4){document.getElementById('authMsg').textContent='Username 3+, Password 4+';return;}localStorage.setItem('ssp_user',u);localStorage.setItem('ssp_pass_'+u,p);balance=1000;updateUI();closeModal('authModal');}
+function doLogin(){var u=document.getElementById('liName').value.trim();var p=document.getElementById('liPass').value;if(localStorage.getItem('ssp_pass_'+u)!==p){document.getElementById('authMsg').textContent='Wrong username or password';return;}localStorage.setItem('ssp_user',u);balance=1000;updateUI();closeModal('authModal');}
 function logout(){localStorage.removeItem('ssp_user');balance=0;location.reload();}
 function clearTimers(){if(waitingTimer){clearTimeout(waitingTimer);waitingTimer=null;}if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}if(tickTimer){clearTimeout(tickTimer);tickTimer=null;}}
-function startWaiting(){clearTimers();inRound=false;flew=false;crashAnim=0;line=[];mult=1;planeProg=1;tickCount=0;myBets.forEach(function(mb,idx){mb.joined=false;mb.playing=false;mb.cashed=false;mb.win=0;setBetBtn(idx,'','BET',Number(document.getElementById('stake'+idx).value).toFixed(2));document.getElementById('panel'+idx).classList.remove('on');});document.getElementById('mult').textContent='1.00x';document.getElementById('mult').className='mult';document.getElementById('status').textContent='NEXT ROUND';document.getElementById('flewLabel').textContent='Waiting for next round...';document.getElementById('roundBtn').textContent='NEXT ROUND';renderPlayers();myBets.forEach(function(mb,idx){if(mb.autoBet)setTimeout(function(){doAutoBet(idx);},400);});var cd=4;document.getElementById('msg').innerHTML='NEXT ROUND IN <b>'+cd+'s</b> • PLACE YOUR 2 BETS!';timerBeep(cd);countdownTimer=setInterval(function(){cd--;if(cd>0){document.getElementById('msg').innerHTML='NEXT ROUND IN <b>'+cd+'s</b> • PLACE YOUR 2 BETS!';timerBeep(cd);}else{clearInterval(countdownTimer);countdownTimer=null;timerBeep(0);startRound();}},1000);}
+function startWaiting(){clearTimers();inRound=false;flew=false;crashAnim=0;line=[];mult=1;planeProg=1;tickCount=0;exploded=false;explosionParts=[];flashVal=0;myBets.forEach(function(mb,idx){mb.joined=false;mb.playing=false;mb.cashed=false;mb.win=0;setBetBtn(idx,'','BET',Number(document.getElementById('stake'+idx).value).toFixed(2));document.getElementById('panel'+idx).classList.remove('on');});document.getElementById('mult').textContent='1.00x';document.getElementById('mult').className='mult';document.getElementById('status').textContent='NEXT ROUND';document.getElementById('flewLabel').textContent='Waiting for next round...';document.getElementById('roundBtn').textContent='NEXT ROUND';renderPlayers();myBets.forEach(function(mb,idx){if(mb.autoBet)setTimeout(function(){doAutoBet(idx);},400);});var cd=4;document.getElementById('msg').innerHTML='NEXT ROUND IN <b>'+cd+'s</b> • PLACE YOUR 2 BETS!';timerBeep(cd);countdownTimer=setInterval(function(){cd--;if(cd>0){document.getElementById('msg').innerHTML='NEXT ROUND IN <b>'+cd+'s</b> • PLACE YOUR 2 BETS!';timerBeep(cd);}else{clearInterval(countdownTimer);countdownTimer=null;timerBeep(0);startRound();}},1000);}
 var tickTimer=null;
 function startRound(){clearTimers();inRound=true;if(soundOn)startJet();if(musicOn)startBg();myBets.forEach(function(mb){if(mb.joined){if(mb.stake<=balance){balance-=mb.stake;mb.playing=true;}else{mb.joined=false;mb.playing=false;}}else mb.playing=false;});updateUI();mult=1;planeProg=1;tickCount=0;crashAt=genCrash();line=[{x:10,y:380}];flew=false;document.getElementById('status').textContent='ROUND IS RUNNING';document.getElementById('flewLabel').textContent='Round in progress...';document.getElementById('roundBtn').textContent='ROUND IN PROGRESS';genPlayers();function tick(){if(!inRound)return;
   tickCount++;
@@ -297,13 +379,75 @@ function startRound(){clearTimers();inRound=true;if(soundOn)startJet();if(musicO
     mult = Math.round((mult + 0.02)*100)/100;
     var el=document.getElementById('mult');el.textContent=mult.toFixed(2)+'x';el.className='mult';updateJet(mult);
   }
-  myBets.forEach(function(mb,idx){if(mb.playing&&!mb.cashed){setBetBtn(idx,'cash','CASH OUT ₦'+Math.floor(mb.stake*mult).toLocaleString(),'Bet '+(idx+1));var a=Number(document.getElementById('autoVal'+idx).value);if(mb.autoCash&&a>=1.1&&mult>=a)cashOut(idx);}});players.forEach(function(pp){if(!pp.isYou&&pp.status==='PLAYING'&&mult>=pp.cashAt){pp.status='CASHED';pp.win=Math.floor(pp.stake*pp.cashAt);}});var p=1-1/planeProg;if(p<0)p=0;var tx=10+Math.pow(p,0.55)*300;var ty=380-Math.pow(p,1.3)*340;if(tx>340)tx=340;if(ty<12)ty=12;line.push({x:tx,y:ty});if(line.length>500)line.shift();renderPlayers();if(mult>=crashAt){crashX=tx;crashY=ty;endRound();return;}tickTimer=setTimeout(tick,130);}tickTimer=setTimeout(tick,130);}
-function endRound(){clearTimers();inRound=false;flew=true;crashAnim=0;crashVX=7;crashVY=-6;crashAngle=-0.35;playCrashSound();addToHistory(mult);document.getElementById('status').textContent='FLEW AWAY!';document.getElementById('flewLabel').textContent='FLEW AWAY!';var el=document.getElementById('mult');el.textContent=mult.toFixed(2)+'x';el.className='mult red';players.forEach(function(pp){if(pp.status==='PLAYING')pp.status='LOST';});myBets.forEach(function(mb){if(mb.playing&&!mb.cashed)mb.playing=false;});renderPlayers();setTimeout(function(){startWaiting();},3200);}
+  myBets.forEach(function(mb,idx){if(mb.playing&&!mb.cashed){setBetBtn(idx,'cash','CASH OUT ₦'+Math.floor(mb.stake*mult).toLocaleString(),'Bet '+(idx+1));var a=Number(document.getElementById('autoVal'+idx).value);if(mb.autoCash&&a>=1.1&&mult>=a)cashOut(idx);}});players.forEach(function(pp){if(!pp.isYou&&pp.status==='PLAYING'&&mult>=pp.cashAt){pp.status='CASHED';pp.win=Math.floor(pp.stake*pp.cashAt); showCashoutNotif(pp.name.replace('@',''), pp.win, pp.cashAt);}});var p=1-1/planeProg;if(p<0)p=0;var tx=10+Math.pow(p,0.55)*300;var ty=380-Math.pow(p,1.3)*340;if(tx>340)tx=340;if(ty<12)ty=12;line.push({x:tx,y:ty});if(line.length>500)line.shift();renderPlayers();if(mult>=crashAt){crashX=tx;crashY=ty;endRound();return;}tickTimer=setTimeout(tick,130);}tickTimer=setTimeout(tick,130);}
+function endRound(){clearTimers();inRound=false;flew=true;crashAnim=0;crashVX=7;crashVY=-6;crashAngle=-0.35;exploded=false;explosionParts=[];flashVal=0;playCrashSound();addToHistory(mult);document.getElementById('status').textContent='💥 BOOM!';document.getElementById('flewLabel').textContent='💥 BOOM! FLEW AWAY!';var el=document.getElementById('mult');el.textContent=mult.toFixed(2)+'x';el.className='mult red';players.forEach(function(pp){if(pp.status==='PLAYING')pp.status='LOST';});myBets.forEach(function(mb){if(mb.playing&&!mb.cashed)mb.playing=false;});renderPlayers();setTimeout(function(){startWaiting();},3200);}
 function doDeposit(){var amt=Number(document.getElementById('dpAmt').value);var name=document.getElementById('dpName').value.trim();var email=document.getElementById('dpEmail').value.trim();var msg=document.getElementById('dpMsg');if(!amt||amt<100||name.length<3||!email||email.indexOf('@')<0){msg.textContent='Fill all fields, Min ₦100';return;}if(!PAYSTACK_KEY||PAYSTACK_KEY==='YOUR_PAYSTACK_PUBLIC_KEY'){msg.textContent='⚠️ Add your Paystack Public Key!';return;}var h=PaystackPop.setup({key:PAYSTACK_KEY,email:email,amount:amt*100,currency:'NGN',ref:''+Math.floor(Math.random()*1000000000),callback:function(res){balance+=amt;updateUI();msg.style.color='#00e6a0';msg.textContent='Success! ₦'+amt.toLocaleString()+' added!';setTimeout(function(){closeModal('depModal');},1000);},onClose:function(){msg.textContent='Paystack closed.';}});h.openIframe();}
 function doWithdraw(){var amt=Number(document.getElementById('wdAmt').value);var bank=document.getElementById('wdBank').value;var acct=document.getElementById('wdAcct').value.trim();var name=document.getElementById('wdName').value.trim();var msg=document.getElementById('wdMsg');if(!amt||amt<500||amt>balance||!bank||acct.length!==10||name.length<3){msg.textContent='Check amount / bank / account';return;}balance-=amt;updateUI();msg.style.color='#00e6a0';msg.textContent='Withdraw sent! ₦'+amt.toLocaleString();setTimeout(function(){closeModal('wdModal');},1200);}
 document.getElementById('stake0').addEventListener('input',function(){myBets[0].stake=Number(this.value||0);document.getElementById('betLabel0').textContent=Number(this.value||0).toFixed(2);});
 document.getElementById('stake1').addEventListener('input',function(){myBets[1].stake=Number(this.value||0);document.getElementById('betLabel1').textContent=Number(this.value||0).toFixed(2);});
 updateUI();animate();genPlayers();renderHistory();startWaiting();
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCfJWGGerynvstKhWlVlG_H7qQEqIHrJEs",
+  authDomain: "student-sureplug.firebaseapp.com",
+  projectId: "student-sureplug",
+  storageBucket: "student-sureplug.firebasestorage.app",
+  messagingSenderId: "502544373472",
+  appId: "1:502544373472:web:60c757bd3001da617d6285",
+  measurementId: "G-WR05NV588D"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+signInAnonymously(auth).catch(e=>console.log(e));
+function getGameUser(){ return localStorage.getItem('ssp_user'); }
+function updateChatUI(){
+  const user = getGameUser();
+  const locked = document.getElementById('chatLocked');
+  const msgs = document.getElementById('chatMsgs');
+  const row = document.getElementById('chatRow');
+  if(!locked) return;
+  if(user){ locked.style.display='none'; msgs.style.display='block'; row.style.display='flex'; }
+  else { locked.style.display='block'; msgs.style.display='none'; row.style.display='none'; }
+}
+updateChatUI(); setInterval(updateChatUI, 1000);
+const q = query(collection(db, "chatMessages"), orderBy("createdAt","asc"), limit(60));
+onSnapshot(q, (snap)=>{
+  const box = document.getElementById('chatMsgs'); if(!box) return;
+  box.innerHTML = "";
+  snap.forEach(d=>{
+    const m = d.data();
+    const div = document.createElement('div');
+    div.className = 'chat-msg' + (m.type==='system' ? ' sys' : '');
+    if(m.type==='system'){ div.innerHTML = `💸 ${m.text}`; }
+    else { div.innerHTML = `<b>@${m.user}:</b> ${m.text}`; }
+    box.appendChild(div);
+  });
+  box.scrollTop = box.scrollHeight;
+});
+window.sendChat = async function(){
+  const user = getGameUser();
+  if(!user){ alert("Please login to chat"); return; }
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim(); if(!text) return;
+  if(text.length > 120){ alert("Message too long"); return; }
+  input.value = "";
+  await addDoc(collection(db, "chatMessages"), { user: user, text: text, type: "chat", createdAt: serverTimestamp() });
+};
+document.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && document.activeElement && document.activeElement.id==='chatInput'){ window.sendChat(); } });
+window._pushCashoutToFirebase = async function(name, amount, atMult){
+  try{
+    const key = name+"-"+amount+"-"+atMult+"-"+Math.floor(Date.now()/5000);
+    if(window._lastFirebaseCashKey === key) return;
+    window._lastFirebaseCashKey = key;
+    await addDoc(collection(db, "chatMessages"), { user: "system", text: `@${name} cashed out ₦${amount.toLocaleString()} @ ${atMult.toFixed(2)}x`, type: "system", createdAt: serverTimestamp() });
+  }catch(e){ console.log(e); }
+};
 </script>
 </body>
 </html>
